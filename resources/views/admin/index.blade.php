@@ -1,15 +1,10 @@
-@extends('layouts.main')
-
-<main>
+@extends('admin.layouts.main')
     @include('layouts.alert')
+
+<section>
     @include('admin.layouts.headers')
+    @include('admin.layouts.sidebar')
+    @include('admin.layouts.dashboard')
+</section>
 
-    <div class="container-fluid">
-        <div class="row">
-            @include('admin.layouts.sidebar')
-            @include('admin.layouts.dashboard')
-        </div>
-    </div>
 
-</main>
-    
