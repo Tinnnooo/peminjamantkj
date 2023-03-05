@@ -19,7 +19,7 @@
     {{--  BOX ICONS  --}}
     <link rel="stylesheet" href="{{ asset('boxicons/css/boxicons.css') }}">
 </head>
-<body id="body-pd">
+<body id="body-pd" class="body-pd">
     @include('layouts.alert')
     @yield('mainAdminLayouts')
     <script src="{{ asset('js/bootstrap.min.js') }}"></script>

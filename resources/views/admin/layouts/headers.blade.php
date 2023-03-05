@@ -1,6 +1,6 @@
-<header class="header" id="header">
+<header class="header body-pd" id="header">
     <div class="header_toggle">
-        <i class="fa-solid fa-bars" id="header-toggle"></i>
+        <i class="fa-solid fa-bars fa-circle-xmark" id="header-toggle"></i>
     </div>
     <div class="header_user">
         <div class="header_img">
