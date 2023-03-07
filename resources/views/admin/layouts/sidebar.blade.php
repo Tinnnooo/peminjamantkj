@@ -43,10 +43,13 @@
                     </li>
 
                     <li class="nav-item">
-                        <a href="/" class="nav_link">
-                            <i class='bx bx-exit nav_icon'></i>
-                            <span class="nav_name">Logout</span>
-                        </a>
+                        <form action="/logout" method="post">
+                            @csrf
+                            <button type="submit" class="nav_link nav_link_logout">
+                                <i class='bx bx-exit nav_icon'></i>
+                                <span class="nav_name">Logout</span>
+                            </button>
+                        </form>
                     </li>
                 </ul>
             </div>

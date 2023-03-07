@@ -29,9 +29,11 @@ Route::middleware(['guest'])->group(function(){
 });
 
 Route::middleware(['auth', 'role:admin'])->group(function(){
-    Route::get('/dashboard/admin', [AdminController::class, 'index']);
-    Route::get('/logout', [LoginController::class, 'logout']);
+    Route::get('/dashboard/admin', [AdminController::class, 'index'])->name('admin.index');
+    Route::post('/logout', [AdminController::class, 'logout']);
 });
+
+Route::get('/logout', [LoginController::class, 'logout']);
 
 
 Route::middleware(['auth', 'role:guru'])->group(function(){
