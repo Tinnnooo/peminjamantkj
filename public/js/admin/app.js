@@ -22,17 +22,41 @@ document.addEventListener("DOMContentLoaded", function(event) {
     }
 
     showNavbar('header-toggle','nav-bar','body-pd','header')
-
-    /*===== LINK ACTIVE =====*/
-    const linkColor = document.querySelectorAll('.nav_link')
-
-    function colorLink(){
-    if(linkColor){
-    linkColor.forEach(l=> l.classList.remove('active'))
-    this.classList.add('active')
-    }
-    }
-    linkColor.forEach(l=> l.addEventListener('click', colorLink))
-
-     // Your code to run since DOM is loaded and ready
     });
+
+document.addEventListener("DOMContentLoaded", function(event) {
+    const showDropdown1 = (toggleId, dropdownId, dropdownIconId) => {
+        const toggle = document.getElementById(toggleId),
+        item = document.getElementById(dropdownId),
+        icon = document.getElementById(dropdownIconId)
+
+        if(toggle && item && icon){
+            toggle.addEventListener('click', () => {
+                item.classList.toggle('item-show')
+
+                toggle.classList.toggle('active');
+
+                icon.classList.toggle('bxs-up-arrow')
+            })
+        }
+    }
+    showDropdown1('toggleDropdown', 'itemDropdown', 'dropdownIcon')
+
+    const showDropdown2 = (toggleId, dropdownId, dropdownIconId) => {
+        const toggle = document.getElementById(toggleId),
+        item = document.getElementById(dropdownId),
+        icon = document.getElementById(dropdownIconId)
+
+        if(toggle && item && icon){
+            toggle.addEventListener('click', () => {
+                item.classList.toggle('item-show')
+
+                toggle.classList.toggle('active');
+
+                icon.classList.toggle('bxs-up-arrow')
+            })
+        }
+    }
+
+    showDropdown2('toggleDropdown2', 'itemDropdown2', 'dropdownIcon2')
+})

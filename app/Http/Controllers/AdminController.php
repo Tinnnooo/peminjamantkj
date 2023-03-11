@@ -14,14 +14,14 @@ class AdminController extends Controller
 {
     public function index(Request $request){
 
-        $rowsBarang = $request->input('rowsBarang') ?? 10;
-        $rowsRuangan = $request->input('rowsRuangan') ?? 10;
+        $rowsBarang = $request->query('rowsBarang', 10);
+        $rowsRuangan = $request->query('rowsRuangan', 10);
 
-        $pinjambarang = Pinjambarang::where('status', 'menunggu')->orWhere('status', 'diizinkan dan belum kembali')->paginate($rowsBarang, ['*'], 'barang');
-        $pinjamruangan = Pinjamruangan::where('status', 'menunggu')->orWhere('status', 'approve')->paginate($rowsRuangan, ['*'], 'ruangan');
+        $pinjambarang = Pinjambarang::where('status', 'menunggu')->orWhere('status','like', '%diizinkan%')->orWhere('status', 'like', '%approve%')->orderBy('status')->paginate($rowsBarang, ['*'], 'barang');
+        $pinjamruangan = Pinjamruangan::where('status', 'menunggu')->orWhere('status', 'like', '%approve%')->orderBy('status')->paginate($rowsRuangan, ['*'], 'ruangan');
 
-        $countBarang = Pinjambarang::where('status', 'menunggu')->orWhere('status', 'diizinkan dan belum kembali')->get();
-        $countRuangan = Pinjamruangan::where('status', 'menunggu')->orWhere('status', 'approve')->get();
+        $countBarang = Pinjambarang::where('status', 'menunggu')->orWhere('status','like', '%diizinkan%')->orWhere('status', 'like', '%approve%')->get();
+        $countRuangan = Pinjamruangan::where('status', 'menunggu')->orWhere('status', 'like', '%approve%')->get();
 
         return view('admin.index', [
             'barang' => Barang::all(),
@@ -45,4 +45,36 @@ class AdminController extends Controller
 
         return redirect('/login');
     }
+
+     /**
+     * Display the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+        public function ruanganApprove($id){
+
+            $user = Auth::user();
+
+            $pinjamruangan = Pinjamruangan::find($id);
+                $pinjamruangan->status = "approve by " . $user->nama_lengkap;
+                $pinjamruangan->save();
+            return redirect('/dashboard/admin');
+        }
+
+     /**
+     * Display the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+        public function barangApprove($id){
+
+            $user = Auth::user();
+
+            $pinjambarang = Pinjambarang::find($id);
+                $pinjambarang->status = "approve by " . $user->nama_lengkap;
+                $pinjambarang->save();
+            return redirect('/dashboard/admin');
+        }
 }

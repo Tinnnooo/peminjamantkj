@@ -14,6 +14,10 @@
                     <option value="100" {{ $rowsRuangan == 100 ? 'selected' : '' }}>100</option>
                 </select>
                 <label class="my-1 mr-2" for="rowsRuangan">entries</label>
+
+                <input type="hidden" name="barang" value="{{ $pinjambarang->currentPage() }}">
+                <input type="hidden" name="ruangan" value="{{ $pinjamruangan->currentPage() }}">
+                <input type="hidden" name="rowsBarang" value="{{ $rowsBarang }}">
             </form>
         </div>
 
@@ -28,14 +32,27 @@
           </tr>
         </thead>
         <tbody class="tbody-light">
+            @php
+                $no = ($pinjamruangan->currentPage() - 1) * $pinjamruangan->perPage() + 1;
+            @endphp
             @if (count($pinjamruangan) !== 0)
                 @foreach ($pinjamruangan as $ruangan)
                     <tr>
-                        <th scope="row">{{ $loop->iteration }}</th>
+                        <th scope="row">{{ $no++ }}</th>
                         <td>{{ $ruangan->ruangan->nama_ruangan }}</td>
                         <td>{{ $ruangan->user->nama_lengkap }}</td>
                         <td>{{ $ruangan->status }}</td>
-                        <td>Mark</td>
+                        <td>
+                            @if ($ruangan->status == 'menunggu')
+                              <form method="POST" action="{{ route('admin.ruanganApprove', $ruangan->id) }}" class="d-inline-block">
+                                @csrf
+                                @method('PUT')
+                                <button type="submit" class="btn btn-primary btn-sm">Approve</button>
+                              </form>
+                            @elseif(Str::contains($ruangan->status, 'approve' ))
+                              <p class="text-success">Approved</p>
+                            @endif
+                          </td>
                     </tr>   
                 @endforeach
             @endif
@@ -45,6 +62,6 @@
         <h5>Tidak ada data.</h5>
     @endif
     <div class="list-pagination">   
-        {{$pinjamruangan->appends(['ruangan' => $pinjamruangan->currentPage()])->links('pagination::bootstrap-5')}}
+        {{$pinjamruangan->appends(['ruangan' => $pinjamruangan->currentPage(), 'rowsRuangan' => $rowsRuangan, 'rowsBarang' => $rowsBarang, 'barang' => $pinjambarang->currentPage()])->links('pagination::bootstrap-5')}}
     </div>
 </section>

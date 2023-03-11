@@ -14,8 +14,13 @@
                     <option value="100" {{ $rowsBarang == 100 ? 'selected' : '' }}>100</option>
                 </select>
                 <label class="my-1 mr-2" for="rowsBarang">entries</label>
+
+                <input type="hidden" name="rowsRuangan" value="{{ $rowsRuangan }}">
+                <input type="hidden" name="barang" value="{{ $pinjambarang->currentPage() }}">
+                <input type="hidden" name="ruangan" value="{{ $pinjamruangan->currentPage() }}">
             </form>
         </div>
+    </div>
 
     <table class="table">
         <thead class="thead-dark">
@@ -28,14 +33,27 @@
           </tr>
         </thead>
         <tbody class="tbody-light">
+            @php
+                $no = ($pinjambarang->currentPage() - 1) * $pinjambarang->perPage() + 1;
+            @endphp
             @if (count($pinjambarang) !== 0)
-                @foreach ($pinjambarang as $barang)
+                @foreach ($pinjambarang as $index => $barang)
                     <tr>
-                        <th scope="row">{{ $loop->iteration }}</th>
+                        <th scope="row">{{ $no++ }}</th>
                         <td>{{ $barang->barang->nama_barang }}</td>
                         <td>{{ $barang->user->nama_lengkap }}</td>
                         <td>{{ $barang->status }}</td>
-                        <td>Mark</td>
+                        <td>
+                            @if ($barang->status === 'menunggu')
+                                <form action="{{ route('admin.barangApprove', $barang->id) }}" method="POST" class="d-inline-block">
+                                    @csrf
+                                    @method('PUT')
+                                    <button type="submit" class="btn btn-primary btn-sm">Approve</button>
+                                </form>
+                            @elseif (Str::contains($barang->status, 'diizinkan' ) || Str::contains($barang->status, 'approve'))
+                                <p class="text-success">Approved</p>
+                            @endif
+                        </td>
                     </tr>
                 @endforeach
             @endif
@@ -45,6 +63,7 @@
             <h5>Tidak ada data.</h5>
         @endif
         <div class="list-pagination">   
-            {{$pinjambarang->appends(['barang' => $pinjambarang->currentPage()])->links('pagination::bootstrap-5')}}   
+            {{$pinjambarang->appends(['barang' => $pinjambarang->currentPage(), 'rowsBarang' => $rowsBarang, 'rowsRuangan' => $rowsRuangan, 'ruangan' => $pinjamruangan->currentPage()])->links('pagination::bootstrap-5')}}   
         </div>
+    
 </section>

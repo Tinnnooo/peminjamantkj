@@ -8,25 +8,79 @@
             <div class="nav_list">
                 <ul class="nav flex-column" id="nav_accordion">
                     <li class="nav-item">
-                        <a href="/" class="nav_link active">
+                        <a href="/" class="nav_link {{ request()->is('dashboard/admin') ? 'active' : '' }}">
                             <i class="bx bx-grid-alt nav_icon"></i>
                             <span class="nav_name">Dashboard</span>
                         </a>
                     </li>
 
                     <li class="nav-item">
-                        <a href="/" class="nav_link">
+                        <span class="nav_link {{ request()->is('dashboard/admin/datamaster/*') ? 'active' : '' }}" id="toggleDropdown" >
                             <i class="fa-solid fa-layer-group nav_icon"></i>
-                            <span class="nav_name">Data Master</span>
-                        </a>
+                            <span class="nav_name">Data Master <i class='bx bxs-down-arrow dropdown_icon' id="dropdownIcon"></i></span>
+                        </span>
                     </li>
 
+                    <div class="data_master-item" id="itemDropdown">
+                        <li class="nav-item">
+                            <a href="{{ route('datamaster' , ['any' => 'barang']) }}" class="nav_link">
+                                <i class='bx bxs-circle nav_icon'></i>
+                                <span class="nav_name">Barang</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ route('datamaster' , ['any' => 'ruangan']) }}" class="nav_link">
+                                <i class='bx bxs-circle nav_icon'></i>
+                                <span class="nav_name">Ruangan</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ route('datamaster' , ['any' => 'bahan']) }}" class="nav_link">
+                                <i class='bx bxs-circle nav_icon'></i>
+                                <span class="nav_name">Bahan</span>
+                            </a>
+                        </li>
+                    </div>
+
                     <li class="nav-item">
-                        <a href="/" class="nav_link">
+                        <span class="nav_link"  id="toggleDropdown2">
                             <i class='bx bx-data nav_icon'></i>
-                            <span class="nav_name">Data Peminjaman</span>
-                        </a>
+                            <span class="nav_name">Data Peminjaman<i class='bx bxs-down-arrow dropdown_icon' id="dropdownIcon2"></i></span>
+                        </span>
                     </li>
+
+                    <div class="data_master-item" id="itemDropdown2">
+                        <li class="nav-item">
+                            <a href="/" class="nav_link">
+                                <i class='bx bxs-circle nav_icon'></i>
+                                <span class="nav_name">Barang Dipinjam</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="/" class="nav_link">
+                                <i class='bx bxs-circle nav_icon'></i>
+                                <span class="nav_name">Barang Kembali</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="/" class="nav_link">
+                                <i class='bx bxs-circle nav_icon'></i>
+                                <span class="nav_name">Barang Batal</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="/" class="nav_link">
+                                <i class='bx bxs-circle nav_icon'></i>
+                                <span class="nav_name">Ruangan Dipinjam</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="/" class="nav_link">
+                                <i class='bx bxs-circle nav_icon'></i>
+                                <span class="nav_name">Ruangan Kembali</span>
+                            </a>
+                        </li>
+                    </div>
 
                     <li class="nav-item">
                         <a href="/" class="nav_link">
@@ -36,7 +90,7 @@
                     </li>
 
                     <li class="nav-item">
-                        <a href="/" class="nav_link">
+                        <a href="{{ route('pengguna') }}" class="nav_link {{ request()->is('dashboard/admin/users') ? 'active' : '' }}">
                             <i class='bx bxs-user nav_icon'></i>
                             <span class="nav_name">Pengguna</span>
                         </a>

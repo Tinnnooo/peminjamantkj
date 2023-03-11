@@ -1,5 +1,4 @@
 @extends('admin.layouts.main')
-    @include('layouts.alert')
 
 <section>
     @include('admin.layouts.headers')
@@ -9,6 +8,7 @@
         @include('admin.layouts.listbarang')
         @include('admin.layouts.listruangan')
     </div>
+    @include('admin.layouts.footer')
 </section>
 
 

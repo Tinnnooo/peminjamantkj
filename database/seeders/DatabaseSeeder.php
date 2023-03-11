@@ -5,6 +5,7 @@ namespace Database\Seeders;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
 use App\Models\User;
+use Database\Factories\UserFactory;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -23,9 +24,14 @@ class DatabaseSeeder extends Seeder
         //     'email' => 'test@example.com',
         // ]);
 
-        $this->call(RoleSeeder::class);
-        $this->call(AdminSeeder::class);
-        $this->call(GuruSeeder::class);
-        $this->call(UserSeeder::class);
+        $users = User::factory()->count(10)->create();
+        foreach ($users as $user) {
+            $user->assignRole('admin');
+        }
+
+        // $this->call(RoleSeeder::class);
+        // $this->call(AdminSeeder::class);
+        // $this->call(GuruSeeder::class);
+        // $this->call(UserSeeder::class);
     }
 }
