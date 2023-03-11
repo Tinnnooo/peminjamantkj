@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\BarangController;
 use App\Http\Controllers\DataMaster;
 use App\Http\Controllers\DataPengguna;
 use App\Http\Controllers\LoginController;
@@ -36,18 +37,28 @@ Route::middleware(['auth', 'role:admin'])->group(function(){
     Route::get('/dashboard/admin', [AdminController::class, 'index'])->name('admin.index');
     Route::put('/dashboard/admin/ruangan/{id}', [AdminController::class, 'ruanganApprove'])->name('admin.ruanganApprove');
     Route::put('/dashboard/admin/barang/{id}', [AdminController::class, 'barangApprove'])->name('admin.barangApprove');
-    
+
     // LOGOUT
     Route::post('/logout', [AdminController::class, 'logout']);
 
     // DATA MASTER
-    Route::get('/dashboard/admin/datamaster/{any}', [DataMaster::class, 'datamaster'])->name('datamaster');
+
+    // BARANG
+    Route::get('/dashboard/admin/datamaster/barang', [DataMaster::class, 'barang'])->name('barang');
+    Route::post('/dashboard/admin/datamaster/barang', [BarangController::class, 'tambahBarang'])->name('tambah_barang');
+    Route::put('/dashboard/admin/datamaster/barang/{id}', [BarangController::class, 'editBarang'])->name('edit_barang');
+    Route::put('/dashboard/admin/datamaster/barang/foto/{id}', [BarangController::class, 'updateFoto'])->name('update_foto');
+    Route::delete('/dashboard/admin/datamaster/barang/{id}', [BarangController::class, 'hapusBarang'])->name('hapus_barang');
+
+    // RUANGAN
+    Route::get('/dashboard/admin/datamaster/ruangan', [DataMaster::class, 'ruangan'])->name('ruangan');
 
     // PENGGUNA
     Route::get('/dashboard/admin/users', [DataPengguna::class, 'index'])->name('pengguna');
     Route::delete('/dashboard/admin/users/{id}', [DataPengguna::class, 'hapusPengguna'])->name('hapus_pengguna');
     Route::put('/dashboard/admin/users/{id}', [DataPengguna::class, 'gantiPassword'])->name('ganti_password');
     Route::put('/dashboard/admin/user/{id}', [DataPengguna::class, 'editPengguna'])->name('edit_pengguna');
+    Route::post('/dashboard/admin/user', [DataPengguna::class, 'tambahPengguna'])->name('tambah_pengguna');
 });
 
 Route::get('/logout', [LoginController::class, 'logout']);

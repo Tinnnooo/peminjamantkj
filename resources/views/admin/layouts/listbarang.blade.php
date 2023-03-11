@@ -62,8 +62,8 @@
         @if (count($pinjambarang) === 0)
             <h5>Tidak ada data.</h5>
         @endif
-        <div class="list-pagination">   
-            {{$pinjambarang->appends(['barang' => $pinjambarang->currentPage(), 'rowsBarang' => $rowsBarang, 'rowsRuangan' => $rowsRuangan, 'ruangan' => $pinjamruangan->currentPage()])->links('pagination::bootstrap-5')}}   
+        <div class="list-pagination">
+            {{$pinjambarang->appends(['barang' => $pinjambarang->currentPage(), 'rowsBarang' => $rowsBarang, 'rowsRuangan' => $rowsRuangan, 'ruangan' => $pinjamruangan->currentPage()])->links('pagination::bootstrap-5')}}
         </div>
-    
+
 </section>

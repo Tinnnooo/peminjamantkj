@@ -14,17 +14,17 @@
 
     <div class="row justify-content-between">
         <div class="col-md-auto">
-            <form class="form-inline" method="GET" action="{{ route('barang') }}">
+            <form class="form-inline" method="GET" action="{{ route('ruangan') }}">
                 <label class="my-1 mr-2" for="rowsBarang">Show</label>
-                <select class="custom-select my-1 mr-sm-2" name="rowsBarang" onchange="this.form.submit()">
-                    <option value="10" {{ $rowsBarang == 10 ? 'selected' : '' }}>10</option>
-                    <option value="20" {{ $rowsBarang == 20 ? 'selected' : '' }}>20</option>
-                    <option value="50" {{ $rowsBarang == 50 ? 'selected' : '' }}>50</option>
-                    <option value="100" {{ $rowsBarang == 100 ? 'selected' : '' }}>100</option>
+                <select class="custom-select my-1 mr-sm-2" name="rowsRuangan" onchange="this.form.submit()">
+                    <option value="10" {{ $rowsRuangan == 10 ? 'selected' : '' }}>10</option>
+                    <option value="20" {{ $rowsRuangan == 20 ? 'selected' : '' }}>20</option>
+                    <option value="50" {{ $rowsRuangan == 50 ? 'selected' : '' }}>50</option>
+                    <option value="100" {{ $rowsRuangan == 100 ? 'selected' : '' }}>100</option>
                 </select>
-                <label class="my-1 mr-2" for="rowsBarang">entries</label>
+                <label class="my-1 mr-2" for="rowsRuangan">entries</label>
 
-                <input type="hidden" name="page" value="{{ $barang->currentPage() }}">
+                <input type="hidden" name="page" value="{{ $ruangan->currentPage() }}">
             </form>
         </div>
 
@@ -38,39 +38,35 @@
           <tr>
             <th scope="col">No</th>
             <th scope="col">Nama Barang</th>
-            <th scope="col">Stok</th>
-            <th scope="col">Status</th>
             <th scope="col">Action</th>
           </tr>
         </thead>
         <tbody class="tbody-barang">
             @php
-                $no = ($barang->currentPage() - 1) * $barang->perPage() + 1;
+                $no = ($ruangan->currentPage() - 1) * $ruangan->perPage() + 1;
             @endphp
-            @foreach ($barang as $brng)
+            @foreach ($ruangan as $ruang)
             <tr>
                 <th scope="row">{{ $no++ }}</th>
-                <td class="col-md-7">{{ $brng->nama_barang }}</td>
-                <td class="col-md-1">{{ $brng->stok }}</td>
-                <td class="col-md-1">{{ $brng->status }}</td>
+                <td class="col-md-7">{{ $ruang->nama_ruangan }}</td>
                 <td class="col-md-3">
-                        <button type="button" class="btn btn-success btn-sm" data-bs-toggle="modal" data-bs-target="#modal{{ $brng->id }}">
+                        <button type="button" class="btn btn-success btn-sm" data-bs-toggle="modal" data-bs-target="#modal{{ $ruang->id }}">
                             <i style="padding: 3.5px;" class="fa-solid fa-eye"></i>
                         </button>
-                        <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#modalEdit{{ $brng->id }}">
+                        <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#modalEdit{{ $ruang->id }}">
                             <i style="padding: 3.5px;" class='bx bx-edit'></i>
                         </button>
-                        <button type="button" class="btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#modalFoto{{ $brng->id }}">
+                        <button type="button" class="btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#modalFoto{{ $ruang->id }}">
                             <i style="padding: 3.5px;" class='bx bxs-file-jpg'></i>
                         </button>
-                        <button type="button" class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#modalHapus{{ $brng->id }}">
+                        <button type="button" class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#modalHapus{{ $ruang->id }}">
                             <i style="padding: 3.5px;" class='bx bx-trash'></i>
                         </button>
                 </td>
             </tr>
 
             {{--  MODAL VIEW  --}}
-            <div class="modal fade" id="modal{{ $brng->id }}" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
+            <div class="modal fade" id="modal{{ $ruang->id }}" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
                 <div class="modal-dialog">
                   <div class="modal-content">
                     <div class="modal-header">
@@ -80,22 +76,19 @@
                     <div class="modal-body">
                         <div class="form-group">
                             <label for="nama_barang">Nama Barang:</label>
-                            <input type="text" class="form-control" id="nama_barang" value="{{ $brng->nama_barang }}" readonly>
+                            <input type="text" class="form-control" id="nama_barang" value="" readonly>
                           </div>
                           <div class="form-group mt-4">
                             <label for="stok">Stok:</label>
-                            <input type="text" class="form-control" id="stok" value="{{ $brng->stok }}" readonly>
+                            <input type="text" class="form-control" id="stok" value="" readonly>
                           </div>
                           <div class="form-group mt-4">
                             <label for="status">Status:</label>
-                            <input type="text" class="form-control" id="status" value="{{ $brng->status }}" readonly>
+                            <input type="text" class="form-control" id="status" value="" readonly>
                           </div>
                           <div class="form-group mt-4">
                             <label for="deskripsi">Deskripsi:</label>
-                            <textarea class="form-control" readonly id="deskripsi" name="deskripsi" rows="5" >{{ $brng->deskripsi }}</textarea>
-                          </div>
-                          <div class="form-group mt-4">
-                            <img src="{{ asset('storage/images/' . $brng->foto) }}" alt="Foto Barang" class="modal-foto">
+                            <textarea class="form-control" readonly id="deskripsi" name="deskripsi" rows="5" ></textarea>
                           </div>
                     </div>
                     <div class="modal-footer">
@@ -106,30 +99,30 @@
             </div>
 
             {{--  MODAL EDIT  --}}
-            <div class="modal fade" id="modalEdit{{ $brng->id }}" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
+            <div class="modal fade" id="modalEdit{{ $ruang->id }}" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
                 <div class="modal-dialog">
                   <div class="modal-content">
                     <div class="modal-header">
                       <h1 class="modal-title fs-5" id="modalLabel">Edit Pengguna</h1>
                       <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
-                    <form method="POST" action="{{ route('edit_barang', $brng->id) }}">
+                    <form method="POST" action="{">
                         @csrf
                         @method('PUT')
                     <div class="modal-body">
                             <div class="form-group">
                               <label for="nama_barang">Nama Barang</label>
-                              <input type="text" class="form-control" name="nama_barang" value="{{ $brng->nama_barang }}" required>
+                              <input type="text" class="form-control" name="nama_barang" value="" required>
                             </div>
 
                             <div class="form-group">
                               <label for="stok">Stok</label>
-                              <input type="text" class="form-control" name="stok" value="{{ $brng->stok }}" required>
+                              <input type="text" class="form-control" name="stok" value="" required>
                             </div>
 
                             <div class="form-group">
                               <label for="deskripsi">Deskripsi</label>
-                              <textarea name="deskripsi" id="deskripsi" rows="5" class="form-control" required>{{ $brng->deskripsi }}</textarea>
+                              <textarea name="deskripsi" id="deskripsi" rows="5" class="form-control" required>{{ $ruang->deskripsi }}</textarea>
                             </div>
 
                             <div class="form-group">
@@ -151,20 +144,20 @@
             </div>
 
             {{--  MODAL FOTO  --}}
-            <div class="modal fade" id="modalFoto{{ $brng->id }}" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
+            <div class="modal fade" id="modalFoto{{ $ruang->id }}" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
                 <div class="modal-dialog">
                   <div class="modal-content">
                     <div class="modal-header">
                       <h1 class="modal-title fs-5" id="modalLabel">Edit Pengguna</h1>
                       <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
-                    <form method="POST" action="{{ route('update_foto', $brng->id) }}" enctype="multipart/form-data">
+                    <form method="POST" action="" enctype="multipart/form-data">
                         @csrf
                         @method('PUT')
                     <div class="modal-body">
                             <div class="form-group">
                               <label for="nama_barang">Nama Barang</label>
-                              <input type="text" class="form-control" name="nama_barang" value="{{ $brng->nama_barang }}" required>
+                              <input type="text" class="form-control" name="nama_barang" value="" required>
                             </div>
 
                             <div class="form-group">
@@ -182,7 +175,7 @@
             </div>
 
             {{--  MODAL HAPUS  --}}
-            <div class="modal fade" id="modalHapus{{ $brng->id }}" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
+            <div class="modal fade" id="modalHapus{{ $ruang->id }}" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
                 <div class="modal-dialog">
                   <div class="modal-content">
                     <div class="modal-header">
@@ -191,11 +184,11 @@
                     </div>
                     <div class="modal-body">
                         <div class="form-group">
-                            <span>Apakah Anda Ingin Menghapus Pengguna {{ $brng->nama_barang }} ?</span>
+                            <span>Apakah Anda Ingin Menghapus Pengguna {{ $ruang->nama_ruangan }} ?</span>
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <form action="{{ route('hapus_barang' , $brng->id) }}" method="POST">
+                        <form action="" method="POST">
                             @csrf
                             @method('DELETE')
                             <button type="submit" class="btn btn-danger" data-bs-dismiss="modal">Hapus</button>
@@ -259,12 +252,12 @@
             </div>
     </table>
 
-        @if (count($barang) === 0)
+        @if (count($ruangan) === 0)
             <h5>Tidak ada data.</h5>
         @endif
 
         <div class="list-pagination">
-            {{$barang->appends(['rowsBarang' => $rowsBarang])->links('pagination::bootstrap-5')}}
+            {{$ruangan->appends(['rowsRuangan' => $rowsRuangan])->links('pagination::bootstrap-5')}}
         </div>
 
 </section>

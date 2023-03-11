@@ -11,7 +11,7 @@
 
     {{--  BOOTSTRAP  --}}
     <link rel="stylesheet" href="{{ asset('css/bootstrap.min.css') }}">
-    
+
 
     {{--  FOTAWESOME  --}}
     <link rel="stylesheet" href="{{ asset('fontawesome/css/all.css') }}">

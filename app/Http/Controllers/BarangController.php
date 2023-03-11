@@ -2,83 +2,120 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Barang;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
+use Intervention\Image\Facades\Image;
+use RealRashid\SweetAlert\Facades\Alert;
+use Illuminate\Support\Facades\Validator;
 
 class BarangController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {
+    //
 
+    public function tambahBarang(Request $request){
+        $validator = Validator::make($request->all(), [
+            "nama_barang" => "required",
+            "stok" => "required",
+            "status" => "required",
+            "deskripsi" => "required",
+            "foto" => "required|image|mimes:jpeg,png,jpg|max:1024",
+        ]);
+
+        if($validator->fails()){
+            Alert::error("Validation Error!", $validator->errors()->first());
+            return back();
+        }
+
+        $nama_file = time()."_".$request->file('foto')->getClientOriginalName();
+        $request->file('foto')->storeAs('images', $nama_file);
+
+        $path_file = public_path('storage/images/'.$nama_file);
+
+        $image = Image::make($path_file);
+        $image->resize(448, 200);
+        $image->save($path_file);
+
+        $data = [
+            "nama_barang" => $request->nama_barang,
+            "stok" => $request->stok,
+            "status" => $request->status,
+            "deskripsi" => $request->deskripsi,
+            "foto" => $nama_file,
+        ];
+
+        Barang::create($data);
+
+        Alert::success('Success', 'Barang baru telah ditambah!');
+        return back();
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
+    public function editBarang(Request $request, $id){
+        $validator = Validator::make($request->all(), [
+            "nama_barang" => "required",
+            "stok" => "required",
+            "deskripsi" => "required",
+            "status" => "required",
+        ]);
+
+        if($validator->fails()){
+            Alert::error("Error Validation!", $validator->errors()->first());
+            return back();
+        }
+
+        $barang = Barang::find($id);
+
+        $barang->nama_barang = $request->nama_barang;
+        $barang->stok = $request->stok;
+        $barang->deskripsi = $request->deskripsi;
+        $barang->status = $request->status;
+        $barang->save();
+
+        Alert::success('Berhasil!', 'Data Berhasil diubah.');
+        return back();
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
+    public function updateFoto(Request $request, $id){
+        $validator = Validator::make($request->all(),[
+            "foto" => "required|image|mimes:png,jpg,jpeg|max:2048",
+        ]);
+
+        if($validator->fails()){
+            Alert::error("Validation error!", $validator->errors()->first());
+            return back();
+        }
+
+        $brng = Barang::find($id);
+        $nama_file = $brng->foto;
+
+        if($request->hasFile('foto')){
+            $nama_file = time()."_".$request->file('foto')->getClientOriginalName();
+            $request->file('foto')->storeAs('images', $nama_file);
+            $path_file = public_path('storage/images/'.$nama_file);
+
+            $image = Image::make($path_file);
+            $image->resize(448, 200);
+            $image->save($path_file);
+
+            Storage::delete('images/'.$brng->foto);
+        }
+
+        $brng->foto = $nama_file;
+        $brng->save();
+
+        Alert::success('Berhasil!', 'Foto barang telah diubah!');
+        return back();
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
+    public function hapusBarang($id){
+        $barang = Barang::find($id);
+        if($barang){
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
+            Storage::delete('images/'.$barang->foto);
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
+            $barang->delete();
+            Alert::success("Berhasil!", "Barang telah di hapus!");
+            return back();
+        }
     }
 }

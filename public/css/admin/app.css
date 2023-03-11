@@ -359,3 +359,36 @@ a {
     vertical-align: middle;
     text-align: center;
 }
+
+
+
+/* EDIT PENGGUNA */
+.formhp{
+    align-items: center;
+    gap: 5px;
+}
+
+.formhp .country-code{
+    flex-basis: 20%;
+}
+
+
+/* TAMBAH PENGGUNA */
+
+.list_header{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+
+/* MODAL */
+
+.modal-foto{
+    display: block;
+    height: 200px;
+    width: 448px;
+    margin-left: auto;
+    margin-right: auto;
+    object-fit: fill;
+}

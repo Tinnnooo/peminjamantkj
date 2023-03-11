@@ -1,7 +1,17 @@
 <section class="list_user_section">
-    <div class="list-title">
-        <h2 class="list-title_text">List Users</h2>
+    <div class="list_header d-flex">
+        <div class="list-title">
+            <h2 class="list-title_text">List Users</h2>
+        </div>
+
+        <div class="form-add">
+            <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#modalAddUser">
+                <i class='bx bx-plus'></i>
+                <span class="add_icon">Tambah Pengguna</span>
+            </button>
+        </div>
     </div>
+
 
     <div class="row justify-content-between">
         <div class="col-md-auto">
@@ -99,14 +109,14 @@
                                       <label for="nama_lengkap">Nama Pengguna</label>
                                       <input type="text" class="form-control" name="nama_lengkap" value="{{ $user->nama_lengkap }}" readonly>
                                     </div>
-                          
+
                                     <div class="form-group">
                                       <label for="password">New Password</label>
                                       <input type="password" class="form-control" id="password" name="password" required>
                                     </div>
 
-                                    
-                                
+
+
                             </div>
                             <div class="modal-footer">
                                 <button type="submit" class="btn btn-primary" data-bs-dismiss="modal">Save</button>
@@ -133,7 +143,12 @@
                                       <label for="nama_lengkap">Nama Pengguna</label>
                                       <input type="text" class="form-control" name="nama_lengkap" value="{{ $user->nama_lengkap }}" required>
                                     </div>
-                          
+
+                                    <div class="form-group">
+                                      <label for="username">Username</label>
+                                      <input type="text" class="form-control" name="username" value="{{ $user->username }}" required>
+                                    </div>
+
                                     <div class="form-group">
                                       <label for="email">Email</label>
                                       <input type="email" class="form-control" id="email" name="email" required value="{{ $user->email }}">
@@ -141,9 +156,13 @@
 
                                     <div class="form-group">
                                         <label for="nohp">No HP</label>
+                                    </div>
+                                    <div class="formhp d-flex">
+                                        <select name="country_code" id="country_code" class="form-select country-code">
+                                            <option value="+62">+62</option>
+                                        </select>
                                         <input type="number" class="form-control" id="nohp" name="nohp" required value="{{ $user->nohp }}">
                                     </div>
-
                                     <div class="form-group">
                                         <label for="level">Level</label>
                                         <select class="form-select form-select-sm" aria-label=".form-select-sm example" name="level">
@@ -152,7 +171,7 @@
                                             <option value="user" {{ $user->roles->first()->name == 'user' ? 'selected' : '' }}>User</option>
                                         </select>
                                     </div>
-                                
+
                             </div>
                             <div class="modal-footer">
                                 <button type="submit" class="btn btn-primary" data-bs-dismiss="modal">Save</button>
@@ -165,12 +184,74 @@
                 @endforeach
             @endif
         </tbody>
+
+        {{--  MODAL ADD  --}}
+        <div class="modal fade" id="modalAddUser" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h1 class="modal-title fs-5" id="modalLabel">Tambah Pengguna</h1>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form method="POST" action="{{ route('tambah_pengguna') }}">
+                    @csrf
+                    @method('POST')
+                    <div class="modal-body">
+                            <div class="form-group">
+                            <label for="nama_lengkap">Nama Pengguna</label>
+                            <input type="text" class="form-control" name="nama_lengkap" placeholder="Nama lengkap" required>
+                            </div>
+
+                            <div class="form-group">
+                            <label for="username">Username</label>
+                            <input type="text" class="form-control" name="username" placeholder="Username" required>
+                            </div>
+
+                            <div class="form-group">
+                            <label for="email">Email</label>
+                            <input type="email" class="form-control" id="email" name="email" required placeholder="example@gmail.com">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="nohp">No HP</label>
+                            </div>
+                            <div class="formhp d-flex">
+                                <select name="country_code" id="country_code" class="form-select country-code">
+                                    <option value="+62">+62</option>
+                                </select>
+                                <input type="number" class="form-control" id="nohp" name="nohp" required placeholder="8xxxxxxxxxx">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="password">Password</label>
+                                <input type="password" class="form-control" id="password" name="password" required placeholder="********">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="level">Level</label>
+                                <select class="form-select form-select-sm" aria-label=".form-select-sm example" name="level">
+                                    <option value="admin">Admin</option>
+                                    <option value="guru">Guru</option>
+                                    <option value="user">User</option>
+                                </select>
+                            </div>
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary" data-bs-dismiss="modal">Add</button>
+                        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+                    </div>
+                </form>
+              </div>
+            </div>
+        </div>
     </table>
+
         @if (count($users) === 0)
             <h5>Tidak ada data.</h5>
         @endif
-        <div class="list-pagination">   
-            {{$users->appends(['rowsUser' => $rowsUser])->links('pagination::bootstrap-5')}}   
+        <div class="list-pagination">
+            {{$users->appends(['rowsUser' => $rowsUser])->links('pagination::bootstrap-5')}}
         </div>
-    
+
 </section>

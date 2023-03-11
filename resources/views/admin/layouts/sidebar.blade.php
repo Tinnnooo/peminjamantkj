@@ -23,19 +23,19 @@
 
                     <div class="data_master-item" id="itemDropdown">
                         <li class="nav-item">
-                            <a href="{{ route('datamaster' , ['any' => 'barang']) }}" class="nav_link">
+                            <a href="{{ route('barang') }}" class="nav_link">
                                 <i class='bx bxs-circle nav_icon'></i>
                                 <span class="nav_name">Barang</span>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="{{ route('datamaster' , ['any' => 'ruangan']) }}" class="nav_link">
+                            <a href="{{ route('ruangan') }}" class="nav_link">
                                 <i class='bx bxs-circle nav_icon'></i>
                                 <span class="nav_name">Ruangan</span>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="{{ route('datamaster' , ['any' => 'bahan']) }}" class="nav_link">
+                            <a href="{{ route('barang') }}" class="nav_link">
                                 <i class='bx bxs-circle nav_icon'></i>
                                 <span class="nav_name">Bahan</span>
                             </a>

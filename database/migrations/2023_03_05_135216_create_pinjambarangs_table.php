@@ -15,8 +15,8 @@ return new class extends Migration
     {
         Schema::create('pinjambarangs', function (Blueprint $table) {
             $table->id();
-            $table->bigIncrements('id_barang');
-            $table->bigIncrements('id_user');
+            $table->integer('id_barang');
+            $table->integer('id_user');
             $table->integer('qty');
             $table->date('tgl_mulai');
             $table->time('wkt_mulai');

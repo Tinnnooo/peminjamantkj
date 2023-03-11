@@ -34,12 +34,12 @@ class DataPengguna extends Controller
         ]);
 
         if($validator->fails()){
-            Alert::error('Error!', 'Password minimal 8 huruf / angka!');
+            Alert::error('Error!', $validator->errors()->first());
             return redirect()->back()->withErrors($validator)->withInput();
         }
-    
+
             $user = User::find($id);
-    
+
             if ($user) {
                 $user->password = bcrypt($request->password);
                 $user->save();
@@ -54,13 +54,14 @@ class DataPengguna extends Controller
         public function editPengguna(Request $request, $id){
             $validator = Validator::make($request->all(),[
                 'nama_lengkap' => 'required',
+                'username' => 'required',
                 'email' => 'required|email:dns',
                 'nohp' => 'required',
                 'level' => 'required',
             ]);
 
             if($validator->fails()){
-                Alert::error('Error!', 'Ada kesalahan dalam pengubahan data!');
+                Alert::error('Error!', $validator->errors()->first());
                 return redirect()->back()->withErrors($validator)->withInput();
             }
 
@@ -68,8 +69,9 @@ class DataPengguna extends Controller
 
             if($user){
                 $user->nama_lengkap = $request->nama_lengkap;
+                $user->username = $request->username;
                 $user->email = $request->email;
-                $user->nohp = $request->nohp;
+                $user->nohp = $request->country_code . $request->nohp;
                 if($request->level == 'admin'){
                     $user->syncRoles(['admin']);
                 } else if ($request->level == 'guru'){
@@ -85,5 +87,40 @@ class DataPengguna extends Controller
                 Alert::error('Error!', 'User tidak ditemukan!');
                 return redirect()->back();
             }
+        }
+
+        public function tambahPengguna(Request $request){
+            $validator = Validator::make($request->all(), [
+                "nama_lengkap" => "required",
+                "username" => "required",
+                "email" => "required|email:dns",
+                "password" => "required|min:8",
+                "nohp" => "required",
+                "level" => "required"
+            ]);
+
+            if($validator->fails()){
+                Alert::error('Validation Error!', $validator->errors()->first());
+                return back();
+            }
+
+            $user = new User();
+            $user->nama_lengkap = $request->nama_lengkap;
+            $user->email = $request->email;
+            $user->username = $request->username;
+            $user->password = bcrypt($request->password);
+            $user->nohp = $request->country_code . $request->nohp;
+            $user->save();
+
+            if($request->level == 'admin'){
+                $user->assignRole('admin');
+            } else if ($request->level == 'guru'){
+                $user->assignRole('guru');
+            } else if ($request->level == 'user'){
+                $user->assignRole('user');
+            }
+
+            Alert::success('Berhasil!', 'Data Pengguna Baru Telah Dibuat!');
+            return redirect()->back();
         }
 }
