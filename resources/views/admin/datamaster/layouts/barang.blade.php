@@ -1,7 +1,7 @@
 <section class="list_barang_section" style='margin-top: 5rem;'>
     <div class="list_header d-flex">
         <div class="list-title">
-            <h2 class="list-title_text">List Users</h2>
+            <h2 class="list-title_text">List Barang</h2>
         </div>
 
         <div class="form-add">
@@ -94,7 +94,7 @@
                             <label for="deskripsi">Deskripsi:</label>
                             <textarea class="form-control" readonly id="deskripsi" name="deskripsi" rows="5" >{{ $brng->deskripsi }}</textarea>
                           </div>
-                          <div class="form-group mt-4">
+                          <div class="form-group mt-3">
                             <img src="{{ asset('storage/images/' . $brng->foto) }}" alt="Foto Barang" class="modal-foto">
                           </div>
                     </div>
@@ -164,7 +164,7 @@
                     <div class="modal-body">
                             <div class="form-group">
                               <label for="nama_barang">Nama Barang</label>
-                              <input type="text" class="form-control" name="nama_barang" value="{{ $brng->nama_barang }}" required>
+                              <input type="text" class="form-control" name="nama_barang" value="{{ $brng->nama_barang }}" required readonly>
                             </div>
 
                             <div class="form-group">
@@ -186,12 +186,12 @@
                 <div class="modal-dialog">
                   <div class="modal-content">
                     <div class="modal-header">
-                      <h1 class="modal-title fs-5" id="modalLabel">Hapus Pengguna</h1>
+                      <h1 class="modal-title fs-5" id="modalLabel">Hapus Barang</h1>
                       <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
                         <div class="form-group">
-                            <span>Apakah Anda Ingin Menghapus Pengguna {{ $brng->nama_barang }} ?</span>
+                            <span>Apakah Anda Ingin Menghapus Barang {{ $brng->nama_barang }} ?</span>
                         </div>
                     </div>
                     <div class="modal-footer">

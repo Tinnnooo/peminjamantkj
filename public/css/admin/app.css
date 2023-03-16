@@ -229,6 +229,23 @@ a {
 
 /* CARD SECTION */
 
+.main-card{
+    gap: 1rem;
+}
+
+.peraturan{
+    flex-basis: 84%;
+}
+
+.peraturan .card{
+    min-width: 100%;
+    min-height: 100%;
+}
+
+.peraturan .card-body{
+    gap: 1rem;
+}
+
 .cards-section{
     display: flex;
     flex-wrap: wrap;
@@ -391,4 +408,8 @@ a {
     margin-left: auto;
     margin-right: auto;
     object-fit: fill;
+}
+
+.tglwkt{
+    justify-content: space-between;
 }

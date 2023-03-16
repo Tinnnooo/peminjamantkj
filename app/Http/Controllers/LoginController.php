@@ -24,13 +24,13 @@ class LoginController extends Controller
 
             $user = Auth::user();
             if($user->hasRole('admin')){
-                Alert::success('Login success!', 'Selamat datang Admin!');
+                Alert::success('Login success!', 'Selamat datang '.$user->nama_lengkap);
                 return redirect()->intended('/dashboard/admin');
             } else if ($user->hasRole('guru')){
-                Alert::success('Login success!', 'Selamat datang!');
+                Alert::success('Login success!', 'Selamat datang '.$user->nama_lengkap);
                 return redirect()->intended('/dashboard/guru');
             } else if ($user->hasRole('user')){
-                Alert::success('Login success!', 'Selamat datang!');
+                Alert::success('Login success!', 'Selamat datang '.$user->nama_lengkap);
                 return redirect()->intended('/dashboard/user');
             }
         };

@@ -8,14 +8,16 @@
             <div class="nav_list">
                 <ul class="nav flex-column" id="nav_accordion">
                     <li class="nav-item">
-                        <a href="/" class="nav_link {{ request()->is('dashboard/admin') ? 'active' : '' }}">
+                        <a href="/" class="nav_link {{ request()->is('dashboard/*') ? 'active' : '' }}">
                             <i class="bx bx-grid-alt nav_icon"></i>
                             <span class="nav_name">Dashboard</span>
                         </a>
                     </li>
 
+                    @role('admin')
+                    {{--  DATA MASTER  --}}
                     <li class="nav-item">
-                        <span class="nav_link {{ request()->is('dashboard/admin/datamaster/*') ? 'active' : '' }}" id="toggleDropdown" >
+                        <span class="nav_link {{ request()->is('*/datamaster/*') ? 'active' : '' }}" id="toggleDropdown" >
                             <i class="fa-solid fa-layer-group nav_icon"></i>
                             <span class="nav_name">Data Master <i class='bx bxs-down-arrow dropdown_icon' id="dropdownIcon"></i></span>
                         </span>
@@ -35,15 +37,16 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="{{ route('barang') }}" class="nav_link">
+                            <a href="{{ route('bahan') }}" class="nav_link">
                                 <i class='bx bxs-circle nav_icon'></i>
                                 <span class="nav_name">Bahan</span>
                             </a>
                         </li>
                     </div>
 
-                    <li class="nav-item">
-                        <span class="nav_link"  id="toggleDropdown2">
+                    {{--  DATA PEMINJAMAN  --}}
+                    <li class="nav-item ">
+                        <span class="nav_link {{ request()->is('*/datapeminjaman/*') ? 'active' : '' }}"  id="toggleDropdown2">
                             <i class='bx bx-data nav_icon'></i>
                             <span class="nav_name">Data Peminjaman<i class='bx bxs-down-arrow dropdown_icon' id="dropdownIcon2"></i></span>
                         </span>
@@ -51,53 +54,86 @@
 
                     <div class="data_master-item" id="itemDropdown2">
                         <li class="nav-item">
-                            <a href="/" class="nav_link">
+                            <a href="{{ route('barangDipinjam') }}" class="nav_link">
                                 <i class='bx bxs-circle nav_icon'></i>
                                 <span class="nav_name">Barang Dipinjam</span>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="/" class="nav_link">
+                            <a href="{{ route('barangKembali') }}" class="nav_link">
                                 <i class='bx bxs-circle nav_icon'></i>
                                 <span class="nav_name">Barang Kembali</span>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="/" class="nav_link">
+                            <a href="{{ route('barangBatal') }}" class="nav_link">
                                 <i class='bx bxs-circle nav_icon'></i>
                                 <span class="nav_name">Barang Batal</span>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="/" class="nav_link">
+                            <a href="{{ route('ruanganDipinjam') }}" class="nav_link">
                                 <i class='bx bxs-circle nav_icon'></i>
                                 <span class="nav_name">Ruangan Dipinjam</span>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="/" class="nav_link">
+                            <a href="{{ route('ruanganKembali') }}" class="nav_link">
                                 <i class='bx bxs-circle nav_icon'></i>
                                 <span class="nav_name">Ruangan Kembali</span>
                             </a>
                         </li>
                     </div>
+                    @endrole
 
+                    @if(auth()->user()->hasAnyRole(['guru', 'user']))
+                    {{--  PINJAM BARANG  --}}
                     <li class="nav-item">
-                        <a href="/" class="nav_link">
+                        <a href="{{ route('pinjamBarang') }}" class="nav_link {{ request()->is('*/pinjambarang') ? 'active' : ''}}"> 
+                            <i class="fa-solid fa-box-open nav_icon"></i>
+                            <span class="nav_name">Pinjam Barang</span>
+                        </a>
+                    </li>
+
+                    {{--  PINJAM RUANGAN  --}}
+                    <li class="nav-item">
+                        <a href="{{ route('ambilBahan') }}" class="nav_link {{ request()->is('*/ambilbahan') ? 'active' : ''}}"> 
+                            <i class="fa-solid fa-person-shelter nav_icon"></i>
+                            <span class="nav_name">Ambil Bahan</span>
+                        </a>
+                    </li>
+                    @endif
+
+                    {{--  AMBIL BAHAN  --}}
+                    @if(auth()->user()->hasAnyRole(['admin', 'guru']))
+                    <li class="nav-item">
+                        <a href="{{ route('ambilBahan') }}" class="nav_link {{ request()->is('*/ambilbahan') ? 'active' : ''}}"> 
                             <i class='bx bxs-widget nav_icon'></i>
                             <span class="nav_name">Ambil Bahan</span>
                         </a>
                     </li>
+                    @endif
 
+                    {{--  PENGGUNA  --}}
+                    @role('admin')
                     <li class="nav-item">
-                        <a href="{{ route('pengguna') }}" class="nav_link {{ request()->is('dashboard/admin/users') ? 'active' : '' }}">
+                        <a href="{{ route('pengguna') }}" class="nav_link {{ request()->is('*/users') ? 'active' : '' }}">
                             <i class='bx bxs-user nav_icon'></i>
                             <span class="nav_name">Pengguna</span>
                         </a>
                     </li>
+                    @endrole
 
                     <li class="nav-item">
-                        <form action="/logout" method="post">
+                        <form action="
+                        @if(Auth::user()->hasRole('admin'))
+                            {{ route('admin.logout') }}
+                        @elseif(Auth::user()->hasRole('guru'))
+                            {{ route('guru.logout') }}
+                        @elseif(Auth::user()->hasRole('user'))
+                            {{ route('user.logout') }}
+                        @endif
+                        " method="post">
                             @csrf
                             <button type="submit" class="nav_link nav_link_logout">
                                 <i class='bx bx-exit nav_icon'></i>

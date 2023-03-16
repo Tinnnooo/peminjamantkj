@@ -15,6 +15,13 @@ return new class extends Migration
     {
         Schema::create('ambilbahans', function (Blueprint $table) {
             $table->id();
+            $table->bigInteger('id_bahan');
+            $table->bigInteger('id_user');
+            $table->date('tgl_ambil')->default(date('Y-m-d'));
+            $table->time('wkt_ambil');
+            $table->integer('qty');
+            $table->string('deskripsi');
+            $table->string('status');
             $table->timestamps();
         });
     }

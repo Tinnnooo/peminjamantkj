@@ -23,6 +23,10 @@ class Pinjambarang extends Model
         return $this->belongsTo(User::class, 'id_user');
     }
 
+    public function guru(){
+        return $this->belongsTo(User::class, 'id_guru');
+    }
+
     public function barang(){
         return $this->belongsTo(Barang::class, 'id_barang');
     }

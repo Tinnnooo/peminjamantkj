@@ -46,7 +46,7 @@ class BarangController extends Controller
 
         Barang::create($data);
 
-        Alert::success('Success', 'Barang baru telah ditambah!');
+        Alert::success('Success', 'Data Barang telah ditambah!');
         return back();
     }
 
@@ -114,7 +114,7 @@ class BarangController extends Controller
             Storage::delete('images/'.$barang->foto);
 
             $barang->delete();
-            Alert::success("Berhasil!", "Barang telah di hapus!");
+            Alert::success("Berhasil!", "Barang telah di hapus.");
             return back();
         }
     }

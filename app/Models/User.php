@@ -54,7 +54,7 @@ class User extends Authenticatable
     }
 
     public function ambilbahans(){
-        return $this->hasMany(Ambilbahan::class);
+        return $this->hasMany(Ambilbahan::class, 'id_user');
     }
 
 }

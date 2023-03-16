@@ -1,13 +1,13 @@
 <section class="list_barang_section" style='margin-top: 5rem;'>
     <div class="list_header d-flex">
         <div class="list-title">
-            <h2 class="list-title_text">List Users</h2>
+            <h2 class="list-title_text">List Ruangan</h2>
         </div>
 
         <div class="form-add">
-            <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#modalAddBarang">
+            <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#modalAddRuangan">
                 <i class='bx bx-plus'></i>
-                <span class="add_icon">Tambah Barang</span>
+                <span class="add_icon">Tambah Ruangan</span>
             </button>
         </div>
     </div>
@@ -15,7 +15,7 @@
     <div class="row justify-content-between">
         <div class="col-md-auto">
             <form class="form-inline" method="GET" action="{{ route('ruangan') }}">
-                <label class="my-1 mr-2" for="rowsBarang">Show</label>
+                <label class="my-1 mr-2" for="rowsRuangan">Show</label>
                 <select class="custom-select my-1 mr-sm-2" name="rowsRuangan" onchange="this.form.submit()">
                     <option value="10" {{ $rowsRuangan == 10 ? 'selected' : '' }}>10</option>
                     <option value="20" {{ $rowsRuangan == 20 ? 'selected' : '' }}>20</option>
@@ -37,7 +37,7 @@
         <thead class="thead-barang">
           <tr>
             <th scope="col">No</th>
-            <th scope="col">Nama Barang</th>
+            <th scope="col">Nama Ruangan</th>
             <th scope="col">Action</th>
           </tr>
         </thead>
@@ -49,16 +49,15 @@
             <tr>
                 <th scope="row">{{ $no++ }}</th>
                 <td class="col-md-7">{{ $ruang->nama_ruangan }}</td>
-                <td class="col-md-3">
+                <td class="col-md-5">
                         <button type="button" class="btn btn-success btn-sm" data-bs-toggle="modal" data-bs-target="#modal{{ $ruang->id }}">
                             <i style="padding: 3.5px;" class="fa-solid fa-eye"></i>
                         </button>
+
                         <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#modalEdit{{ $ruang->id }}">
                             <i style="padding: 3.5px;" class='bx bx-edit'></i>
                         </button>
-                        <button type="button" class="btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#modalFoto{{ $ruang->id }}">
-                            <i style="padding: 3.5px;" class='bx bxs-file-jpg'></i>
-                        </button>
+
                         <button type="button" class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#modalHapus{{ $ruang->id }}">
                             <i style="padding: 3.5px;" class='bx bx-trash'></i>
                         </button>
@@ -70,27 +69,24 @@
                 <div class="modal-dialog">
                   <div class="modal-content">
                     <div class="modal-header">
-                      <h1 class="modal-title fs-5" id="modalLabel">Detail Barang</h1>
+                      <h1 class="modal-title fs-5" id="modalLabel">Detail Ruangan</h1>
                       <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
                         <div class="form-group">
-                            <label for="nama_barang">Nama Barang:</label>
-                            <input type="text" class="form-control" id="nama_barang" value="" readonly>
-                          </div>
-                          <div class="form-group mt-4">
-                            <label for="stok">Stok:</label>
-                            <input type="text" class="form-control" id="stok" value="" readonly>
-                          </div>
-                          <div class="form-group mt-4">
-                            <label for="status">Status:</label>
-                            <input type="text" class="form-control" id="status" value="" readonly>
+                            <label for="nama_barang">Nama Ruangan:</label>
+                            <input type="text" class="form-control" id="nama_barang" value="{{ $ruang->nama_ruangan }}" readonly>
                           </div>
                           <div class="form-group mt-4">
                             <label for="deskripsi">Deskripsi:</label>
-                            <textarea class="form-control" readonly id="deskripsi" name="deskripsi" rows="5" ></textarea>
+                            <textarea class="form-control" readonly id="deskripsi" name="deskripsi" rows="5" >{{ $ruang->deskripsi }}</textarea>
                           </div>
                     </div>
+
+                    <div class="form-group mt-3">
+                      <img src="{{ asset('storage/images/'.$ruang->foto) }}" alt="Foto Ruangan" class="modal-foto">
+                    </div>
+
                     <div class="modal-footer">
                       <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
                     </div>
@@ -103,21 +99,16 @@
                 <div class="modal-dialog">
                   <div class="modal-content">
                     <div class="modal-header">
-                      <h1 class="modal-title fs-5" id="modalLabel">Edit Pengguna</h1>
+                      <h1 class="modal-title fs-5" id="modalLabel">Edit Ruangan</h1>
                       <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
-                    <form method="POST" action="{">
+                    <form method="POST" action="{{ route('edit_ruangan', $ruang->id) }}" enctype="multipart/form-data">
                         @csrf
                         @method('PUT')
                     <div class="modal-body">
                             <div class="form-group">
-                              <label for="nama_barang">Nama Barang</label>
-                              <input type="text" class="form-control" name="nama_barang" value="" required>
-                            </div>
-
-                            <div class="form-group">
-                              <label for="stok">Stok</label>
-                              <input type="text" class="form-control" name="stok" value="" required>
+                              <label for="nama_ruangan">Nama Ruangan</label>
+                              <input type="text" class="form-control" name="nama_ruangan" value="{{ $ruang->nama_ruangan }}" required>
                             </div>
 
                             <div class="form-group">
@@ -126,43 +117,8 @@
                             </div>
 
                             <div class="form-group">
-                                <label for="status">Status</label>
-                                <select class="form-select form-select-sm" aria-label=".form-select-sm example" name="status">
-                                    <option value="free" selected >Free</option>
-                                    <option value="rusak">Rusak</option>
-                                </select>
-                            </div>
-
-                    </div>
-                    <div class="modal-footer">
-                        <button type="submit" class="btn btn-primary" data-bs-dismiss="modal">Save</button>
-                        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
-                    </div>
-                </form>
-                  </div>
-                </div>
-            </div>
-
-            {{--  MODAL FOTO  --}}
-            <div class="modal fade" id="modalFoto{{ $ruang->id }}" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
-                <div class="modal-dialog">
-                  <div class="modal-content">
-                    <div class="modal-header">
-                      <h1 class="modal-title fs-5" id="modalLabel">Edit Pengguna</h1>
-                      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <form method="POST" action="" enctype="multipart/form-data">
-                        @csrf
-                        @method('PUT')
-                    <div class="modal-body">
-                            <div class="form-group">
-                              <label for="nama_barang">Nama Barang</label>
-                              <input type="text" class="form-control" name="nama_barang" value="" required>
-                            </div>
-
-                            <div class="form-group">
-                                <label for="foto">Foto</label>
-                                <input type="file" class="form-control" name="foto" id="foto" required>
+                              <label for="foto">Foto:</label>
+                              <input type="file" name="foto" id="foto" class="form-control" required>
                             </div>
                     </div>
                     <div class="modal-footer">
@@ -188,7 +144,7 @@
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <form action="" method="POST">
+                        <form action="{{ route('hapus_ruangan', $ruang->id) }}" method="POST">
                             @csrf
                             @method('DELETE')
                             <button type="submit" class="btn btn-danger" data-bs-dismiss="modal">Hapus</button>
@@ -203,33 +159,20 @@
 
         </tbody>
             {{--  MODAL ADD  --}}
-            <div class="modal fade" id="modalAddBarang" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
+            <div class="modal fade" id="modalAddRuangan" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
                 <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
-                    <h1 class="modal-title fs-5" id="modalLabel">Tambah Barang</h1>
+                    <h1 class="modal-title fs-5" id="modalLabel">Tambah Ruangan</h1>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
-                    <form method="POST" action="{{ route('tambah_barang') }}" enctype="multipart/form-data">
+                    <form method="POST" action="{{ route('tambah_ruangan') }}" enctype="multipart/form-data">
                         @csrf
                         @method('POST')
                         <div class="modal-body">
                                 <div class="form-group">
-                                <label for="nama_barang">Nama Barang</label>
-                                <input type="text" class="form-control" name="nama_barang" placeholder="Nama Barang.." required>
-                                </div>
-
-                                <div class="form-group">
-                                <label for="stok">Stok</label>
-                                <input type="number" class="form-control" name="stok" placeholder="Stok.." required>
-                                </div>
-
-                                <div class="form-group">
-                                    <label for="status">Status</label>
-                                    <select class="form-select form-select-sm" aria-label=".form-select-sm example" name="status">
-                                        <option value="free" selected >Free</option>
-                                        <option value="rusak">Rusak</option>
-                                    </select>
+                                <label for="nama_ruangan">Nama Ruangan</label>
+                                <input type="text" class="form-control" name="nama_ruangan" placeholder="Nama Ruangan.." required>
                                 </div>
 
                                 <div class="form-group">

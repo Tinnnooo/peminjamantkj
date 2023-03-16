@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Bahan;
 use App\Models\Barang;
 use App\Models\Ruangan;
 use Illuminate\Http\Request;
@@ -27,4 +28,12 @@ class DataMaster extends Controller
         ]);
     }
 
+    public function bahan(Request $request){
+        $rowsBahan = $request->query('rowsBahan', 10);
+
+        return view('admin.datamaster.index',[
+            'bahans' => Bahan::paginate($rowsBahan),
+            'rowsBahan' => $rowsBahan,
+        ]);
+    }
 }
