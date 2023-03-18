@@ -8,6 +8,7 @@ use App\Models\Ruangan;
 use App\Models\Pinjambarang;
 use Illuminate\Http\Request;
 use App\Models\Pinjamruangan;
+use DateTime;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
@@ -49,7 +50,7 @@ class PinjamBarangController extends Controller
     public function barangKembali(Request $request){
 
         $rowsBarang = $request->query('rowsBarang');
-        
+
         return view('admin.datapeminjaman.index',[
             'barangKembali' => Pinjambarang::where('status', !'dibatalkan')->orWhere('status', 'LIKE' ,'%selesai%')->paginate($rowsBarang),
             'rowsBarang' => $rowsBarang
@@ -67,14 +68,18 @@ class PinjamBarangController extends Controller
         ]);
     }
 
+    // USER
+
     // PINJAM BARANG
 
     public function pinjamBarang(Request $request){
         $rowsBarang = $request->query('rowsBarang', 10);
         $role = Role::where('name', 'guru')->first();
 
+        $dataPinjam = Pinjambarang::where('id_user', Auth::user()->id)->paginate($rowsBarang);
+
         return view('user.index', [
-            'pinjambarang' => Pinjambarang::paginate($rowsBarang),
+            'pinjambarang' =>  $dataPinjam,
             'rowsBarang' => $rowsBarang,
             'barang' => Barang::where('status', 'free')->where('stok', 1)->get(),
             'guru' => User::role($role)->get(),
@@ -83,9 +88,13 @@ class PinjamBarangController extends Controller
 
     // BATAL PINJAM
     public function batalPinjam(Request $request, $id){
-        $pinjambarang = Pinjambarang::find($id);
+        $pinjambarang = Pinjambarang::find($id)->first();
+        $barang = Barang::find($pinjambarang->id_barang)->first();
 
         if($pinjambarang){
+            $barang->stok = 1;
+            $barang->save();
+
             $pinjambarang->tgl_selesai = $request->tgl_selesai;
             $pinjambarang->wkt_selesai = $request->wkt_selesai;
             $pinjambarang->status = 'batal pinjam';
@@ -130,11 +139,11 @@ class PinjamBarangController extends Controller
             return back();
         }
 
-        
+
         $barang = Barang::where('nama_barang', $request->nama_barang)->first();
         $guru = User::where('nama_lengkap', $request->nama_guru)->first();
         $user = Auth::user();
-        if(Hash::check($request->password, $user->password)){
+        if(Hash::check($request->password, $user->password) && $barang && $guru){
             $barang->stok = 0;
             $barang->save();
 
@@ -145,7 +154,7 @@ class PinjamBarangController extends Controller
         $pinjam->qty = 1;
         $pinjam->tgl_mulai = $request->tgl_mulai;
         $pinjam->wkt_mulai = $request->wkt_mulai;
-        $pinjam->tgl_selesai = '00:00:00';
+        $pinjam->tgl_selesai = '0000-00-00';
         $pinjam->wkt_selesai = '00:00:00';
         $pinjam->lokasi_barang = $request->lokasi;
         $pinjam->status = 'menunggu';
@@ -154,7 +163,7 @@ class PinjamBarangController extends Controller
         Alert::success('Berhasil!', 'Berhasil Pinjam Barang.');
         return back();
         } else {
-            Alert::error('Error!', 'Password salah');
+            Alert::error('Error!', 'Data tidak dapat diproses atau passsword salah.');
             return back();
         }
     }

@@ -41,19 +41,25 @@
                         <th scope="row">{{ $no++ }}</th>
                         <td>{{ $ruangan->ruangan->nama_ruangan }}</td>
                         <td>{{ $ruangan->user->nama_lengkap }}</td>
-                        <td>{{ $ruangan->status }}</td>
                         <td>
-                            @if ($ruangan->status == 'menunggu')
-                              <form method="POST" action="{{ route('admin.ruanganApprove', $ruangan->id) }}" class="d-inline-block">
-                                @csrf
-                                @method('PUT')
-                                <button type="submit" class="btn btn-primary btn-sm">Approve</button>
-                              </form>
-                            @elseif(Str::contains($ruangan->status, 'approve' ))
-                              <p class="text-success">Approved</p>
+                            @if($ruangan->status == 'menunggu')
+                            <span class="bg-danger text-white rounded-2 border-success">{{ $ruangan->status }}</span>
+                            @elseif(Str::contains($ruangan->status, 'approve'))
+                            <span class="bg-success text-white rounded-2 border-success">{{ $ruangan->status }}</span>
                             @endif
+                        </td>
+                        <td>
+                            <form method="POST" action="{{ auth()->user()->hasRole('admin') ? route('admin.ruanganApprove', $ruangan->id) : route('guru.approveRuangan', $ruangan->id) }}" class="d-inline-block">
+                              @csrf
+                              @method('PUT')
+                                @if ($ruangan->status === 'menunggu')
+                                    <button type="submit" class="btn btn-primary btn-sm">Approve</button>
+                                @elseif (Str::contains($ruangan->status, 'approve'))
+                                    <span class="bg-success text-white rounded-2 border-success">{{ $ruangan->status }}</span>
+                                @endif
+                            </form>
                           </td>
-                    </tr>   
+                    </tr>
                 @endforeach
             @endif
         </tbody>
@@ -61,7 +67,7 @@
     @if(count($pinjamruangan) === 0)
         <h5>Tidak ada data.</h5>
     @endif
-    <div class="list-pagination">   
+    <div class="list-pagination">
         {{$pinjamruangan->appends(['ruangan' => $pinjamruangan->currentPage(), 'rowsRuangan' => $rowsRuangan, 'rowsBarang' => $rowsBarang, 'barang' => $pinjambarang->currentPage()])->links('pagination::bootstrap-5')}}
     </div>
 </section>

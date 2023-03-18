@@ -89,7 +89,7 @@
                     @if(auth()->user()->hasAnyRole(['guru', 'user']))
                     {{--  PINJAM BARANG  --}}
                     <li class="nav-item">
-                        <a href="{{ route('pinjamBarang') }}" class="nav_link {{ request()->is('*/pinjambarang') ? 'active' : ''}} {{ request()->is('*/pinjambarang/*') ? 'active' : '' }}"> 
+                        <a href="{{ auth()->user()->hasRole('guru') ? route('pinjamBarangGuru') : route('pinjamBarangUser') }}" class="nav_link {{ request()->is('*/pinjambarang') ? 'active' : ''}} {{ request()->is('*/pinjambarang/*') ? 'active' : '' }}">
                             <i class="fa-solid fa-box-open nav_icon"></i>
                             <span class="nav_name">Pinjam Barang</span>
                         </a>
@@ -97,9 +97,9 @@
 
                     {{--  PINJAM RUANGAN  --}}
                     <li class="nav-item">
-                        <a href="{{ route('ambilBahan') }}" class="nav_link {{ request()->is('*/ambilbahan') ? 'active' : ''}}"> 
-                            <i class="fa-solid fa-person-shelter nav_icon"></i>
-                            <span class="nav_name">Ambil Bahan</span>
+                        <a href="{{ auth()->user()->hasRole('guru') ? route('pinjamRuanganGuru') : route('pinjamRuanganUser') }}" class="nav_link {{ request()->is('*/pinjamruangan') ? 'active' : ''}}">
+                            <i class="bx bx-home-alt-2 nav_icon"></i>
+                            <span class="nav_name">Pinjam Ruangan</span>
                         </a>
                     </li>
                     @endif
@@ -107,7 +107,7 @@
                     {{--  AMBIL BAHAN  --}}
                     @if(auth()->user()->hasAnyRole(['admin', 'guru']))
                     <li class="nav-item">
-                        <a href="{{ route('ambilBahan') }}" class="nav_link {{ request()->is('*/ambilbahan') ? 'active' : ''}}"> 
+                        <a href="{{ route('ambilBahan') }}" class="nav_link {{ request()->is('*/ambilbahan') ? 'active' : ''}}">
                             <i class='bx bxs-widget nav_icon'></i>
                             <span class="nav_name">Ambil Bahan</span>
                         </a>

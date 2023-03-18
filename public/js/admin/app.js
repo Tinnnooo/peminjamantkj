@@ -62,25 +62,25 @@ document.addEventListener("DOMContentLoaded", function(event) {
 })
 
 // DATALIST PINJAMBARANG
-const barang = document.getElementById('inputNama_barang');
-const nama_barang = document.getElementById('optionNama_barang');
+const inputPinjaman = document.getElementById('inputPinjaman');
+const optionPinjaman = document.getElementById('optionPinjaman');
 
-barang.addEventListener('focus', function () {
-  nama_barang.style.display = 'block';
-  barang.style.borderRadius = "5px 5px 0 0";
+inputPinjaman.addEventListener('focus', function () {
+  optionPinjaman.style.display = 'block';
+  inputPinjaman.style.borderRadius = "5px 5px 0 0";
 });
 
-barang.addEventListener('focusout', function() {
+inputPinjaman.addEventListener('focusout', function() {
     setTimeout(() => {
-      nama_barang.style.display = 'none';
-      barang.style.borderRadius = '5px';
+      optionPinjaman.style.display = 'none';
+      inputPinjaman.style.borderRadius = '5px';
     }, 100);
   });
 
-  nama_barang.addEventListener('click', function (event) {
-    barang.value = event.target.value;
-    nama_barang.style.display = 'none';
-    barang.style.borderRadius = "5px";
+  optionPinjaman.addEventListener('click', function (event) {
+    inputPinjaman.value = event.target.value;
+    optionPinjaman.style.display = 'none';
+    inputPinjaman.style.borderRadius = "5px";
   });
 
 
@@ -105,3 +105,6 @@ guru.addEventListener('focusout', function() {
     namaGuru.style.display = 'none';
     namaGuru.style.borderRadius = "5px";
   });
+
+
+

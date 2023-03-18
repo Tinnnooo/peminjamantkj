@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string('nama_ruangan');
             $table->string('deskripsi');
             $table->string('foto');
+            $table->string('status')->default('free');
             $table->timestamps();
         });
     }

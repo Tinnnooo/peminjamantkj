@@ -42,17 +42,23 @@
                         <th scope="row">{{ $no++ }}</th>
                         <td>{{ $barang->barang->nama_barang }}</td>
                         <td>{{ $barang->user->nama_lengkap }}</td>
-                        <td>{{ $barang->status }}</td>
                         <td>
-                            @if ($barang->status === 'menunggu')
-                                <form action="{{ route('admin.barangApprove', $barang->id) }}" method="POST" class="d-inline-block">
-                                    @csrf
-                                    @method('PUT')
-                                    <button type="submit" class="btn btn-primary btn-sm">Approve</button>
-                                </form>
-                            @elseif (Str::contains($barang->status, 'diizinkan' ) || Str::contains($barang->status, 'approve'))
-                                <p class="text-success">Approved</p>
+                            @if($barang->status == 'menunggu')
+                            <span class="bg-danger text-white rounded-2 border-success">{{ $barang->status }}</span>
+                            @elseif(Str::contains($barang->status, 'approve'))
+                            <span class="bg-success text-white rounded-2 border-success">{{ $barang->status }}</span>
                             @endif
+                        </td>
+                        <td>
+                            <form action="{{ auth()->user()->hasRole('admin') ? route('admin.barangApprove', $barang->id) : route('guru.approveBarang', $barang->id) }}" method="POST" class="d-inline-block">
+                                @csrf
+                                    @method('PUT')
+                            @if ($barang->status === 'menunggu')
+                                    <button type="submit" class="btn btn-primary btn-sm">Approve</button>
+                            @elseif (Str::contains($barang->status, 'approve'))
+                                <span class="bg-success text-white rounded-2 border-success">{{ $barang->status }}</span>
+                            @endif
+                        </form>
                         </td>
                     </tr>
                 @endforeach

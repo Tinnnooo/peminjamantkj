@@ -21,8 +21,8 @@ return new class extends Migration
             $table->integer('qty');
             $table->date('tgl_mulai');
             $table->time('wkt_mulai');
-            $table->date('tgl_selesai')->nullable();
-            $table->time('wkt_selesai')->nullable();
+            $table->date('tgl_selesai')->nullable()->default(NULL);
+            $table->time('wkt_selesai')->nullable()->default(NULL);
             $table->string('lokasi_barang');
             $table->string('status');
             $table->timestamps();

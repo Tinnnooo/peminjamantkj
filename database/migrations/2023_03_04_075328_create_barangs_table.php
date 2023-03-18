@@ -19,7 +19,7 @@ return new class extends Migration
             $table->integer('stok');
             $table->string('deskripsi');
             $table->string('foto');
-            $table->string('status');
+            $table->string('status')->default('free');
             $table->timestamps();
         });
     }

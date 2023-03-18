@@ -50,6 +50,7 @@ Route::middleware(['auth', 'role:admin'])->group(function(){
 
     // DASHBOARD
     Route::get('/dashboard/admin', [AdminController::class, 'index'])->name('admin.index');
+
     Route::put('/dashboard/admin/ruangan/{id}', [AdminController::class, 'ruanganApprove'])->name('admin.ruanganApprove');
     Route::put('/dashboard/admin/barang/{id}', [AdminController::class, 'barangApprove'])->name('admin.barangApprove');
 
@@ -113,13 +114,28 @@ Route::middleware(['auth', 'role:guru'])->group(function(){
 
     // DASHBOARD
     Route::get('/dashboard/guru', [GuruController::class, 'index'])->name('guru');
+    Route::put('/dashboard/guru/approveBarang/{id}', [GuruController::class, 'approveBarang'])->name('guru.approveBarang');
+    Route::put('/dashboard/guru/approveRuangan/{id}', [GuruController::class, 'approveRuangan'])->name('guru.approveRuangan');
 
 
     // LOGOUT
     Route::post('guru/logout', [GuruController::class, 'logout'])->name('guru.logout');
 
     // PINJAM BARANG
-    Route::get('guru/pinjambarang', [PinjamBarangController::class, 'pinjamBarang'])->name('pinjamBarang');
+    Route::get('guru/pinjambarang', [PinjamBarangController::class, 'pinjamBarang'])->name('pinjamBarangGuru');
+    Route::put('guru/pinjambarang/batalkanpinjaman/{id}', [PinjamBarangController::class, 'batalPinjam'])->name('batalkanPinjamanGuru');
+    Route::put('guru/pinjambarang/kembalikanpinjaman/{id}', [PinjamBarangController::class, 'kembaliPinjam'])->name('kembalikanPinjamanGuru');
+    Route::get('guru/pinjambarang/form', [PinjamBarangController::class, 'pinjamBarang'])->name('inputPinjamBarangGuru');
+
+    Route::post('guru/pinjambarang/kirimpinjaman', [PinjamBarangController::class, 'kirimPinjaman'])->name('kirimPinjamanGuru');
+
+    // PINJAM RUANGAN
+    Route::get('guru/pinjamruangan', [PinjamRuanganController::class, 'pinjamRuangan'])->name('pinjamRuanganGuru');
+    Route::put('guru/pinjamruangan/batalkanPinjamRuangan/{id}', [PinjamRuanganController::class, 'batalkanPinjamRuangan'])->name('batalkanPinjamRuanganGuru');
+    Route::put('guru/pinjamruangan/kembalikanruangan/{id}', [PinjamRuanganController::class, 'kembalikanRuangan'])->name('kembalikanRuanganGuru');
+    Route::get('guru/pinjamruangan/form', [PinjamRuanganController::class, 'pinjamRuangan'])->name('inputPinjamRuanganGuru');
+
+    Route::post('guru/pinjamruangan/kirimPinjaman', [PinjamRuanganController::class, 'kirimPinjaman'])->name('kirimPinjamanRuanganGuru');
 });
 
 Route::middleware(['auth', 'role:user'])->group(function(){
@@ -132,11 +148,19 @@ Route::middleware(['auth', 'role:user'])->group(function(){
     Route::post('user/logout', [UserController::class, 'logout'])->name('user.logout');
 
     // PINJAM BARANG
-    Route::get('user/pinjambarang', [PinjamBarangController::class, 'pinjamBarang'])->name('pinjamBarang');
-    Route::put('user/pinjambarang/batalkanpinjaman/{id}', [PinjamBarangController::class, 'batalPinjam'])->name('batalkanPinjaman');
-    Route::put('user/pinjambarang/kembalikanpinjaman/{id}', [PinjamBarangController::class, 'kembaliPinjam'])->name('kembalikanPinjaman');
-    Route::get('user/pinjambarang/form', [PinjamBarangController::class, 'pinjamBarang'])->name('inputPinjamBarang');
+    Route::get('user/pinjambarang', [PinjamBarangController::class, 'pinjamBarang'])->name('pinjamBarangUser');
+    Route::put('user/pinjambarang/batalkanpinjaman/{id}', [PinjamBarangController::class, 'batalPinjam'])->name('batalkanPinjamanUser');
+    Route::put('user/pinjambarang/kembalikanpinjaman/{id}', [PinjamBarangController::class, 'kembaliPinjam'])->name('kembalikanPinjamanUser');
+    Route::get('user/pinjambarang/form', [PinjamBarangController::class, 'pinjamBarang'])->name('inputPinjamBarangUser');
 
-    Route::post('user/pinjambarang/kirimpinjaman', [PinjamBarangController::class, 'kirimPinjaman'])->name('kirimPinjaman');
+    Route::post('user/pinjambarang/kirimpinjaman', [PinjamBarangController::class, 'kirimPinjaman'])->name('kirimPinjamanUser');
+
+    // PINJAM RUANGAN
+    Route::get('user/pinjamruangan', [PinjamRuanganController::class, 'pinjamRuangan'])->name('pinjamRuanganUser');
+    Route::put('user/pinjamruangan/batalkanPinjamRuangan/{id}', [PinjamRuanganController::class, 'batalkanPinjamRuangan'])->name('batalkanPinjamRuanganUser');
+    Route::put('user/pinjamruangan/kembalikanruangan/{id}', [PinjamRuanganController::class, 'kembalikanRuangan'])->name('kembalikanRuanganUser');
+    Route::get('user/pinjamruangan/form', [PinjamRuanganController::class, 'pinjamRuangan'])->name('inputPinjamRuanganUser');
+
+    Route::post('user/pinjamruangan/kirimPinjaman', [PinjamRuanganController::class, 'kirimPinjaman'])->name('kirimPinjamanRuanganUser');
 });
 

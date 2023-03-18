@@ -3,10 +3,14 @@
 <section>
     @include('admin.layouts.headers')
     @include('admin.layouts.sidebar')
-        @if(request()->is('user/pinjambarang'))
+        @if(request()->is('*/pinjambarang'))
             @include('layouts.pinjambarang')
-        @elseif(request()->is('user/pinjambarang/form'))
+        @elseif(request()->is('*/pinjambarang/form'))
             @include('layouts.input.pinjamBarangInput')
+        @elseif(request()->is('*/pinjamruangan'))
+            @include('layouts.pinjamruangan')
+        @elseif(request()->is('*/pinjamruangan/form'))
+            @include('layouts.input.pinjamRuanganInput')
         @endif
     @include('admin.layouts.footer')
 </section>
