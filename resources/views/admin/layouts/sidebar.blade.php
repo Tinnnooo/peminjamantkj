@@ -89,7 +89,7 @@
                     @if(auth()->user()->hasAnyRole(['guru', 'user']))
                     {{--  PINJAM BARANG  --}}
                     <li class="nav-item">
-                        <a href="{{ route('pinjamBarang') }}" class="nav_link {{ request()->is('*/pinjambarang') ? 'active' : ''}}"> 
+                        <a href="{{ route('pinjamBarang') }}" class="nav_link {{ request()->is('*/pinjambarang') ? 'active' : ''}} {{ request()->is('*/pinjambarang/*') ? 'active' : '' }}"> 
                             <i class="fa-solid fa-box-open nav_icon"></i>
                             <span class="nav_name">Pinjam Barang</span>
                         </a>

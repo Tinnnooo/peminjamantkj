@@ -9,7 +9,10 @@ use App\Models\Pinjambarang;
 use Illuminate\Http\Request;
 use App\Models\Pinjamruangan;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Validator;
 use RealRashid\SweetAlert\Facades\Alert;
+use Spatie\Permission\Models\Role;
 
 class PinjamBarangController extends Controller
 {
@@ -68,10 +71,13 @@ class PinjamBarangController extends Controller
 
     public function pinjamBarang(Request $request){
         $rowsBarang = $request->query('rowsBarang', 10);
+        $role = Role::where('name', 'guru')->first();
 
         return view('user.index', [
             'pinjambarang' => Pinjambarang::paginate($rowsBarang),
             'rowsBarang' => $rowsBarang,
+            'barang' => Barang::where('status', 'free')->where('stok', 1)->get(),
+            'guru' => User::role($role)->get(),
         ]);
     }
 
@@ -93,14 +99,62 @@ class PinjamBarangController extends Controller
     // KEMBALIKAN PINJAMAN
     public function kembaliPinjam(Request $request, $id){
         $pinjambarang = Pinjambarang::find($id);
+        $barang = Barang::find($pinjambarang->id_barang);
 
         if($pinjambarang){
+            $barang->stok = 1;
+            $barang->save();
+
             $pinjambarang->tgl_selesai = $request->tgl_selesai;
             $pinjambarang->wkt_selesai = $request->wkt_selesai;
             $pinjambarang->status = 'selesai';
             $pinjambarang->save();
 
             Alert::success('Berhasil!', 'Berhasil kembalikan pinjaman.');
+            return back();
+        }
+    }
+
+    public function kirimPinjaman(Request $request){
+        $validator = Validator::make($request->all(),[
+            'nama_barang' => 'required',
+            'nama_guru' => 'required',
+            'password' => 'required',
+            'tgl_mulai' => 'required',
+            'wkt_mulai' => 'required',
+            'lokasi' => 'required',
+        ]);
+
+        if($validator->fails()){
+            Alert::error("Validation Error!", $validator->errors()->first());
+            return back();
+        }
+
+        
+        $barang = Barang::where('nama_barang', $request->nama_barang)->first();
+        $guru = User::where('nama_lengkap', $request->nama_guru)->first();
+        $user = Auth::user();
+        if(Hash::check($request->password, $user->password)){
+            $barang->stok = 0;
+            $barang->save();
+
+        $pinjam = new Pinjambarang();
+        $pinjam->id_barang = $barang->id;
+        $pinjam->id_guru = $guru->id;
+        $pinjam->id_user = $user->id;
+        $pinjam->qty = 1;
+        $pinjam->tgl_mulai = $request->tgl_mulai;
+        $pinjam->wkt_mulai = $request->wkt_mulai;
+        $pinjam->tgl_selesai = '00:00:00';
+        $pinjam->wkt_selesai = '00:00:00';
+        $pinjam->lokasi_barang = $request->lokasi;
+        $pinjam->status = 'menunggu';
+        $pinjam->save();
+
+        Alert::success('Berhasil!', 'Berhasil Pinjam Barang.');
+        return back();
+        } else {
+            Alert::error('Error!', 'Password salah');
             return back();
         }
     }

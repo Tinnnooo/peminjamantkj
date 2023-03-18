@@ -1,19 +1,20 @@
 <?php
 
-use App\Http\Controllers\AdminController;
-use App\Http\Controllers\AmbilBahanController;
-use App\Http\Controllers\BahanController;
-use App\Http\Controllers\BarangController;
+use Faker\Guesser\Name;
 use App\Http\Controllers\DataMaster;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\DataPengguna;
 use App\Http\Controllers\GuruController;
+use App\Http\Controllers\UserController;
+use App\Http\Controllers\AdminController;
+use App\Http\Controllers\BahanController;
 use App\Http\Controllers\LoginController;
+use App\Http\Controllers\BarangController;
+use App\Http\Controllers\RuanganController;
+use App\Http\Controllers\AmbilBahanController;
 use App\Http\Controllers\PinjamBarangController;
 use App\Http\Controllers\PinjamRuanganController;
-use App\Http\Controllers\RuanganController;
-use App\Http\Controllers\UserController;
-use Faker\Guesser\Name;
-use Illuminate\Support\Facades\Route;
 
 /*
 |--------------------------------------------------------------------------
@@ -26,21 +27,19 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function() {
-    return redirect('/login');
-})->middleware(['guest']);
+Route::get('/', function () {
+    if (Auth::check() && Auth::user()->hasRole('admin')) {
+        return redirect('/dashboard/admin');
+    } elseif (Auth::check() && Auth::user()->hasRole('guru')) {
+        return redirect('/dashboard/guru');
+    } elseif (Auth::check() && Auth::user()->hasRole('user')) {
+        return redirect('/dashboard/user');
+    } else {
+        return redirect('/login');
+    }
+});
 
-Route::get('/', function() {
-    return redirect('/dashboard/admin');
-})->middleware(['auth', 'role:admin']);
 
-Route::get('/', function() {
-    return redirect('/dashboard/guru');
-})->middleware(['auth', 'role:guru']);
-
-Route::get('/', function() {
-    return redirect('/dashboard/user');
-})->middleware(['auth', 'role:user']);
 
 Route::middleware(['guest'])->group(function(){
     Route::get('/login', [LoginController::class, 'index'])->name('login');
@@ -53,6 +52,7 @@ Route::middleware(['auth', 'role:admin'])->group(function(){
     Route::get('/dashboard/admin', [AdminController::class, 'index'])->name('admin.index');
     Route::put('/dashboard/admin/ruangan/{id}', [AdminController::class, 'ruanganApprove'])->name('admin.ruanganApprove');
     Route::put('/dashboard/admin/barang/{id}', [AdminController::class, 'barangApprove'])->name('admin.barangApprove');
+
 
     // LOGOUT
     Route::post('/admin/logout', [AdminController::class, 'logout'])->name('admin.logout');
@@ -110,8 +110,10 @@ Route::middleware(['auth', 'role:admin'])->group(function(){
 });
 
 Route::middleware(['auth', 'role:guru'])->group(function(){
+
     // DASHBOARD
     Route::get('/dashboard/guru', [GuruController::class, 'index'])->name('guru');
+
 
     // LOGOUT
     Route::post('guru/logout', [GuruController::class, 'logout'])->name('guru.logout');
@@ -121,8 +123,10 @@ Route::middleware(['auth', 'role:guru'])->group(function(){
 });
 
 Route::middleware(['auth', 'role:user'])->group(function(){
+
     // DASHBOARD
     Route::get('/dashboard/user', [UserController::class, 'index'])->name('user.index');
+
 
     // LOGOUT
     Route::post('user/logout', [UserController::class, 'logout'])->name('user.logout');
@@ -131,5 +135,8 @@ Route::middleware(['auth', 'role:user'])->group(function(){
     Route::get('user/pinjambarang', [PinjamBarangController::class, 'pinjamBarang'])->name('pinjamBarang');
     Route::put('user/pinjambarang/batalkanpinjaman/{id}', [PinjamBarangController::class, 'batalPinjam'])->name('batalkanPinjaman');
     Route::put('user/pinjambarang/kembalikanpinjaman/{id}', [PinjamBarangController::class, 'kembaliPinjam'])->name('kembalikanPinjaman');
+    Route::get('user/pinjambarang/form', [PinjamBarangController::class, 'pinjamBarang'])->name('inputPinjamBarang');
+
+    Route::post('user/pinjambarang/kirimpinjaman', [PinjamBarangController::class, 'kirimPinjaman'])->name('kirimPinjaman');
 });
 

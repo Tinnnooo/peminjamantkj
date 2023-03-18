@@ -5,7 +5,7 @@
         </div>
 
         <div class="form-add">
-          <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#modalTambahData">
+          <button type="button" class="btn btn-primary btn-sm" onclick="window.location.href='{{ route('inputPinjamBarang') }}'">
               <i class='bx bx-plus'></i>
               <span class="add_icon">Tambah Data</span>
           </button>
