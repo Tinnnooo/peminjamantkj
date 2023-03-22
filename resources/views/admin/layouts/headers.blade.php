@@ -6,6 +6,8 @@
         <div class="header_img">
             <i class='bx bx-user-circle'></i>
         </div>
-        <h4>{{ auth()->user()->username}}</h4>
+        <div class="header_name">
+            <h4>{{ auth()->user()->username}}</h4>
+        </div>
     </div>
 </header>

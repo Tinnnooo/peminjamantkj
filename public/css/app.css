@@ -1,173 +1,82 @@
-*{
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-    font-family: Arial, Helvetica, sans-serif;
+html,
+body {
+  height: 100%;
 }
 
-.login-container{
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    min-height: 100vh;
-    overflow: hidden;
+body {
+  display: flex;
+  align-items: center;
+  padding-top: 40px;
+  padding-bottom: 40px;
+  background: #fff;
 }
 
-.login-screen{
-    background: linear-gradient(90deg, #20abe2, #9adfe4);
+
+.form-signin {
+  width: 100%;
+  max-width: 330px;
+  padding: 2rem;
+  margin: auto;
+  background: #fff;
+  box-sizing: border-box;
+  border-radius: 10px;
+}
+
+.form-signin form h1{
+    text-align: center;
+}
+
+.form-signin form button {
+    text-align: center;
+}
+
+.form-signin .user_box{
     position: relative;
-    height: 600px;
-    width: 360px;
-    box-shadow: 0px 0px 24px #71b2ee;
 }
 
-.login-screen_content{
-    z-index: 1;
-    position: relative;
-    height: 100%;
+.form-signin .user_box input{
+    width: 100%;
+    padding: 10px 15px;
+    font-size: 16px;
+    color: #000;
+    margin-bottom: 30px;
+    border: none;
+    border-bottom: 1px solid #2596be;
+    outline: none;
+    background: transparent;
 }
 
-.login-screen_background{
+.form-signin .user_box label {
     position: absolute;
     top: 0;
     left: 0;
-    right: 0;
-    bottom: 0;
-    z-index: 0;
-    -webkit-clip-path: inset(0 0 0 0);
-    clip-path: inset(0 0 0 0);
+    padding: 10px 0 ;
+    font-size: 16px;
+    color: #2596be;
+    pointer-events: none;
+    transition: .5s;
 }
 
-.login-screen_background_shape{
-    transform: rotate(45deg);
-    position: absolute;
+.form-signin .user_box input:focus ~ label,
+.form-signin .user_box input:valid ~ label{
+    top: -25px;
+    left: 0;
+    color: #299fca;
+    font-size: 16px;
 }
 
-.login-screen_background_shape1{
-    height: 520px;
-    width: 520px;
-    top: -50px;
-    background: #ffffff;
-    right: 120px;
-    border-radius: 0 72px 0 0;
-}
-
-.login-screen_background_shape2{
-    height: 220px;
-    width: 220px;
-    background: #75a8ec;
-    top: -172px;
-    right: 0;
-    border-radius: 32px;
-}
-
-.login-screen_background_shape3{
-    height: 540px;
-    width: 190px;
-    background: linear-gradient(270deg, #22438b, #4498c9);
-    top: -24px;
-    right: 0;
-    border-radius: 32px;
-}
-
-.login-screen_background_shape4{
-    height: 400px;
-    width: 200px;
-    background: #4851d1;
-    top: 420px;
-    right: 50px;
-    border-radius: 60px;
-}
-
-
-.login-form{
-    width: 320px;
-    padding: 30px;
-    padding-top: 156px;
-}
-
-.login-form_field{
-    padding: 20px 0px;
-    position: relative;
-}
-
-.login-form_icon{
-    position: absolute;
-    top: 30px;
-    color: #7875b5;
-}
-
-.login-form_input{
-    border: none;
-    border-bottom: 2px solid #d1d1d4;
-    background: none;
-    padding: 10px;
-    padding-left: 24px;
-    font-weight: 700;
-    width: 75%;
-    transition: .2s;
-}
-
-.login-form_input:active,
-.login-form_input:focus,
-.login-form_input:hover{
-    outline: none;
-    border-bottom-color: #6a689e;
-}
-
-.login-form_submit{
-    background: #fff;
-    font-size: 14px;
-    margin-top: 30px;
-    padding: 16px 20px;
-    border-radius: 26px;
-    border: 1px solid #d4d3e8;
-    text-transform: uppercase;
-    font-weight: 700;
-    display: flex;
-    align-items: center;
-    width: 100%;
-    color: #4c4890;
-    box-shadow: 0px 2px 2px #5c5696;
-    cursor: pointer;
-    transform: .2s;
-}
-
-.login-form_submit:active,
-.login-form_submit:focus,
-.login-form_submit:hover{
-    border-color: #6a679e;
-    outline: none;
-}
-
-.login-button_icon{
-    font-size: 24px;
-    margin-left: auto;
-    color: #7875b5;
-}
-
-.login-fill_instruction{
-    position: absolute;
-    height: 120px;
-    width: 230px;
+.form-signin .text_info {
     text-align: center;
-    display: flex;
-    justify-content: center;
-    flex-direction: column;
-    bottom: 5px;
-    right: 65px;
-    color: #ffffff;
+    margin-top: 1rem;
 }
 
-.login-fill_instruction_text{
-    font-size: 16px;
-    font-weight: 500;
-    background: #0a15779d;
-    border-radius: 5px;
+.form-signin .text_info p{
+    margin: 0;
+    padding: 0;
 }
 
-.login-fill_instruction_nis{
-    font-size: 16px;
-    font-weight: bolder;
-    color: #fff ;
+.form-signin .text_info :nth-child(2){
+    color: #2596be;
+    font-size: 20px;
+    font-weight: 600;
 }

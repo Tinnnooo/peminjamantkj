@@ -2,7 +2,7 @@
     <div class="section_input_header d-flex">
         <div class="header_left">
             <div class="header_icon">
-                <button type="button" class="btn btn-danger btn-sm" onclick="window.location.href='{{ auth()->user()->hasRole('guru') ? route('pinjamBarangGuru') : route('pinjamBarangUser') }}'">
+                <button type="button" class="btn btn-danger btn-sm" onclick="window.location.href='{{ route('guru.ambilBahan') }}'">
                     <i class='bx bx-arrow-back header_icon_icon'></i>
                     <span class="icon_text">Back</span>
                 </button>
@@ -14,33 +14,33 @@
         </div>
     </div>
 
-    <form action="{{ auth()->user()->hasRole('guru') ? route('kirimPinjamanGuru') : route('kirimPinjamanUser') }}" method="POST" enctype="multipart/form-data">
+    <form action="{{ route('kirimAmbilBahan') }}" method="POST" enctype="multipart/form-data">
         @csrf
     <div class="section_input_content d-flex">
         <div class="container section_input_main1 shadow-lg bg-white rounded">
             <div class="input_title">
-                <h5 class="input_title_text">Create Pinjam Barang</h5>
+                <h5 class="input_title_text">Create Ambil Bahan</h5>
             </div>
 
             <div class="input_main mt-4">
                 <div class="form-group datalist_barang">
-                    <label for="nama_barang">Nama Barang :</label>
-                    <input for="nama_barang" class="form-control mt-2" id="inputPinjaman" placeholder="-- Pilih Barang --" name="nama_barang" autocomplete="off" />
+                    <label for="nama_bahan">Nama Bahan :</label>
+                    <input class="form-control mt-2" id="inputPinjaman" list="optionPinjaman" name="nama_bahan" placeholder="-- Pilih Bahan --" autocomplete="off">
                     <datalist id="optionPinjaman">
-                        @foreach($barang as $brg)
-                          <option value="{{ $brg->nama_barang }}">{{ $brg->nama_barang }}</option>
+                        @foreach($bahan as $bhn)
+                            <option value="{{ $bhn->nama_bahan }}" data-stok="{{ $bhn->stok }}" data-deskripsi="{{ $bhn->deskripsi }}">{{ $bhn->nama_bahan }}</option>
                         @endforeach
-                      </datalist>
+                    </datalist>
                 </div>
 
                 <div class="form-group datalist_guru">
-                    <label for="nama_guru">Nama Guru Yang Mengajar :</label>
-                    <input for="nama_guru" class="form-control mt-2" id="inputNama_guru" placeholder="-- Nama Guru --" name="nama_guru" autocomplete="off" />
-                    <datalist id="optionNama_guru">
-                        @foreach($guru as $gr)
-                          <option value="{{ $gr->nama_lengkap }}">{{ $gr->nama_lengkap }}</option>
-                        @endforeach
-                      </datalist>
+                    <label for="stok">Stok :</label>
+                    <input class="form-control mt-2 text-muted" id="stok" placeholder="Stok" name="stok" readonly>
+                </div>
+
+                <div class="form-group datalist_guru">
+                    <label for="deskripsiBahan">Deskripsi :</label>
+                    <textarea name="deskripsiBahan" id="deskripsiBahan" rows="3" class="form-control  mt-2 text-muted" placeholder="Deskripsi..." readonly></textarea>
                 </div>
             </div>
         </div>
@@ -50,29 +50,33 @@
                 <h5 class="input_title_text">Data Peminjam</h5>
             </div>
 
-
             <div class="input_main mt-4">
                 <div class="form-group">
                     <label for="password">Password Pengirim :</label>
                     <input type="password" name="password" class="form-control mt-2" id="password" placeholder="Password Pengirim..">
                 </div>
 
-                <div class="form-group" style="margin-top: 2rem;">
-                    <label for="tgl_mulai">Tanggal Mulai Pinjam :</label>
-                    <input type="text" name="tgl_mulai" class="form-control mt-2 text-muted" id="tgl_mulai" value="{{ date('Y-m-d') }}" readonly>
+                <div class="form-group">
+                    <label for="jumlah">Jumlah Bahan Diambil :</label>
+                    <input type="number" name="jumlah" class="form-control mt-2" id="jumlah" value="1">
                 </div>
 
                 <div class="form-group" style="margin-top: 2rem;">
-                    <label for="wkt_mulai">Tanggal Mulai Pinjam :</label>
+                    <label for="tgl_ambil">Tanggal Ambil Bahan :</label>
+                    <input type="text" name="tgl_ambil" class="form-control mt-2 text-muted" id="tgl_ambil" value="{{ date('Y-m-d') }}" readonly>
+                </div>
+
+                <div class="form-group" style="margin-top: 2rem;">
+                    <label for="wkt_ambil">Tanggal Ambil Bahan :</label>
                     @php
                     date_default_timezone_set('Asia/Jakarta')
                     @endphp
-                    <input type="text" name="wkt_mulai" class="form-control mt-2 text-muted" id="wkt_mulai" value="{{ date('H:i:s') }}" readonly>
+                    <input type="text" name="wkt_ambil" class="form-control mt-2 text-muted" id="wkt_ambil" value="{{ date('H:i:s') }}" readonly>
                 </div>
 
                 <div class="form-group" style="margin-top: 2rem;">
-                    <label for="lokasi">Lokasi Barang Akan Digunakan :</label>
-                    <textarea name="lokasi" id="lokasi" rows="3" class="form-control mt-2" placeholder="Lokasi Barang..." ></textarea>
+                    <label for="untuk">Bahan akan digunakan untuk :</label>
+                    <textarea name="untuk" id="untuk" rows="3" class="form-control mt-2" placeholder="Peruntukan..." ></textarea>
                 </div>
 
                 <div class="submit_button">
@@ -80,7 +84,7 @@
                         <i class='bx bx-send'></i>
                         <span class="icon_text">Kirim</span>
                     </button>
-                    <button type="button" class="btn btn-danger" onclick="window.location.href='{{ auth()->user()->hasRole('guru') ? route('pinjamBarangGuru') : route('pinjamBarangUser') }}'">
+                    <button type="button" class="btn btn-danger" onclick="window.location.href='{{ route('guru.ambilBahan') }}'">
                         <i class='bx bx-arrow-back'></i>
                         <span class="icon_text">Cancel</span>
                     </button>

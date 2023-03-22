@@ -58,9 +58,6 @@
                         <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#modalEdit{{ $bahan->id }}">
                             <i style="padding: 3.5px;" class='bx bx-edit'></i>
                         </button>
-                        <button type="button" class="btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#modalFoto{{ $bahan->id }}">
-                            <i style="padding: 3.5px;" class='bx bxs-file-jpg'></i>
-                        </button>
                         <button type="button" class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#modalHapus{{ $bahan->id }}">
                             <i style="padding: 3.5px;" class='bx bx-trash'></i>
                         </button>
@@ -128,7 +125,7 @@
 
                             <div class="form-group">
                                 <label for="foto">Foto</label>
-                                <input type="file" class="form-control" name="foto" id="foto" required>
+                                <input type="file" class="form-control" name="foto" id="foto">
                             </div>
 
                     </div>

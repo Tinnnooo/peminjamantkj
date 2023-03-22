@@ -39,23 +39,23 @@
                 @foreach ($pinjamruangan as $ruangan)
                     <tr>
                         <th scope="row">{{ $no++ }}</th>
-                        <td>{{ $ruangan->ruangan->nama_ruangan }}</td>
-                        <td>{{ $ruangan->user->nama_lengkap }}</td>
-                        <td>
+                        <td style="width: 35%;">{{ $ruangan->ruangan->nama_ruangan }}</td>
+                        <td style="width: 20%;">{{ $ruangan->user->nama_lengkap }}</td>
+                        <td style="width: 2 0%;">
                             @if($ruangan->status == 'menunggu')
-                            <span class="bg-danger text-white rounded-2 border-success">{{ $ruangan->status }}</span>
+                            <span class="bg-danger text-white rounded-2 border-success p-1 d-flex">{{ $ruangan->status }}</span>
                             @elseif(Str::contains($ruangan->status, 'approve'))
-                            <span class="bg-success text-white rounded-2 border-success">{{ $ruangan->status }}</span>
+                            <span class="bg-success text-white rounded-2 d-flex border-success">{{ $ruangan->status }}</span>
                             @endif
                         </td>
-                        <td>
+                        <td style="width: 90%;">
                             <form method="POST" action="{{ auth()->user()->hasRole('admin') ? route('admin.ruanganApprove', $ruangan->id) : route('guru.approveRuangan', $ruangan->id) }}" class="d-inline-block">
                               @csrf
                               @method('PUT')
                                 @if ($ruangan->status === 'menunggu')
                                     <button type="submit" class="btn btn-primary btn-sm">Approve</button>
                                 @elseif (Str::contains($ruangan->status, 'approve'))
-                                    <span class="bg-success text-white rounded-2 border-success">{{ $ruangan->status }}</span>
+                                    <span class="bg-success text-white rounded-2 d-flex border-success">{{ $ruangan->status }}</span>
                                 @endif
                             </form>
                           </td>

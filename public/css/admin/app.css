@@ -53,8 +53,10 @@ a {
     display: flex;
 }
 
-.header_user h4{
+.header_user .header_name{
     display: flex;
+    align-items: center;
+    font-size: 25px;
     align-items: center;
 }
 
@@ -63,12 +65,13 @@ a {
     height: 35px;
     display: flex;
     justify-content: center;
+    align-items: center;
     border-radius: 50%;
     overflow: hidden
 }
 
 .header_img i {
-    font-size: 40px;
+    font-size: 30px;
 }
 
 
@@ -267,7 +270,8 @@ a {
 
 .dashboard-list{
     display: flex;
-    gap: 30px;
+    width: 100%;
+    gap: 25px;
 }
 
 /* LIST TABLE */
@@ -281,6 +285,7 @@ a {
 .thead-dark th{
     border-right: 1px solid #fff;
     border-left: 1px solid #fff;
+    text-align: center;
 }
 
 .tbody-light{
@@ -291,6 +296,14 @@ a {
     border: 1px solid #fff;
     height: 70px;
     vertical-align: middle;
+    text-align: center;
+}
+
+.tbody-light td span{
+    justify-content: center;
+    vertical-align: middle;
+    text-align: center;
+    align-items: center;
 }
 
 .tbody-light th{
@@ -329,13 +342,30 @@ a {
 
 .list_barang_section,
 .list_ruangan_section{
-    margin-top: 1rem;
+    margin-top: 2rem;
     flex: 1;
 }
 
 .list-title{
     margin-bottom: 1rem;
     color: var(--first-color);
+    border: 1px solid var(--first-color);
+    padding: 5px;
+    text-align: center;
+    border-radius: 10px;
+}
+
+.list_barang_title{
+    color: var(--first-color);
+}
+
+.list_header_barang{
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 1rem;
+    border: 1px solid var(--first-color);
+    padding: 15px;
+    border-radius: 10px;
 }
 
 .footer{

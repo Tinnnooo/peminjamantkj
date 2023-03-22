@@ -3,6 +3,13 @@
         <div class="list-title">
             <h2 class="list-title_text">List Ambil Bahan</h2>
         </div>
+
+        <div class="form-add">
+            <button type="button" class="btn btn-primary btn-sm" onclick="window.location.href='{{ route('tambahAmbilBahan') }}'">
+                <i class='bx bx-plus'></i>
+                <span class="add_icon">Tambah Data</span>
+            </button>
+        </div>
     </div>
 
     <div class="row justify-content-between">
@@ -30,12 +37,11 @@
         <thead class="thead-barang">
           <tr>
             <th scope="col">No</th>
-            <th scope="col">Nama Pengambil</th>
             <th scope="col">Nama Bahan</th>
             <th scope="col">Tgl Ambil</th>
             <th scope="col">Wkt Ambil</th>
             <th scope="col">Jumlah Ambil</th>
-            <th scope="col">Peruntukan</th>
+            <th scope="col">Deskripsi</th>
             <th scope="col">Status</th>
             <th scope="col">Action</th>
           </tr>
@@ -47,14 +53,13 @@
             @foreach ($ambil_bahan as $bahan)
             <tr>
                 <th scope="row">{{ $no++ }}</th>
-                <td style="width: 15%;">{{ $bahan->user->nama_lengkap }}</td>
-                <td style="width: 15%;">{{ $bahan->bahan->nama_bahan }}</td>
-                <td style="width: 10%;">{{ $bahan->tgl_ambil }}</td>
-                <td style="width: 10%;">{{ $bahan->wkt_ambil }}</td>
-                <td style="width: 10%;">{{ $bahan->qty }}</td>
+                <td style="width: 20%;">{{ $bahan->bahan->nama_bahan }}</td>
+                <td style="width: 12%;">{{ $bahan->tgl_ambil }}</td>
+                <td style="width: 12%;">{{ $bahan->wkt_ambil }}</td>
+                <td style="width: 15%;">{{ $bahan->qty }}</td>
                 <td style="width: 12%;">{{ $bahan->deskripsi }}</td>
                 <td style="width: 12%;">
-                  @if($bahan->status == 'menunggu')
+                    @if($bahan->status == 'menunggu')
                     <span class="bg-danger text-white p-1 rounded-5 border-success">{{ $bahan->status }}</span>
                     @elseif($bahan->status == 'batal ambil')
                     <span class="bg-warning text-white p-1 rounded-5 border-success">{{ $bahan->status }}</span>
@@ -63,26 +68,26 @@
                     @endif
                 </td>
                 <td style="width: 90%;">
-                  @if ($bahan->status === 'menunggu')
-                    <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#modal{{ $bahan->id }}">
-                      <i style="padding: 3.5px;" class="fa-solid fa-eye"></i>
-                  </button>
-                  <button type="button" class="btn btn-success btn-sm" data-bs-toggle="modal" data-bs-target="#modalApprove{{ $bahan->id }}">
-                      <i style="padding: 3.5px;" class='bx bx-check-circle'></i>
-                  </button>
-                  @elseif($bahan->status == 'batal ambil')
-                  <button type="button" class="btn btn-success btn-sm" data-bs-toggle="modal" data-bs-target="#modal{{ $bahan->id }}">
-                      <i style="padding: 3.5px;" class="fa-solid fa-eye"></i>
-                  </button>
+                    @if ($bahan->status === 'menunggu')
+                        <button type="button" class="btn btn-success btn-sm" data-bs-toggle="modal" data-bs-target="#modal{{ $bahan->id }}">
+                            <i style="padding: 3.5px;" class="fa-solid fa-eye"></i>
+                        </button>
 
-                  <span class="bg-warning text-white p-1 rounded-5 border-success">{{ $bahan->status }}</span>
-                  @elseif(Str::contains($bahan->status, 'approve'))
-                  <button type="button" class="btn btn-success btn-sm" data-bs-toggle="modal" data-bs-target="#modal{{ $bahan->id }}">
-                      <i style="padding: 3.5px;" class="fa-solid fa-eye"></i>
-                  </button>
-                  <span class="bg-success text-white p-1 rounded-5 border-success">{{ $bahan->status }}</span>
-                  @endif
-                        
+                        <button type="button" class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#modalBatal{{ $bahan->id }}">
+                            <i style="padding: 3.5px;" class='bx bxs-trash'></i>
+                        </button>
+                    @elseif($bahan->status == 'batal ambil')
+                    <button type="button" class="btn btn-success btn-sm" data-bs-toggle="modal" data-bs-target="#modal{{ $bahan->id }}">
+                        <i style="padding: 3.5px;" class="fa-solid fa-eye"></i>
+                    </button>
+
+                    <span class="bg-warning text-white p-1 rounded-5 border-success">{{ $bahan->status }}</span>
+                    @elseif(Str::contains($bahan->status, 'approve'))
+                    <button type="button" class="btn btn-success btn-sm" data-bs-toggle="modal" data-bs-target="#modal{{ $bahan->id }}">
+                        <i style="padding: 3.5px;" class="fa-solid fa-eye"></i>
+                    </button>
+                    <span class="bg-success text-white p-1 rounded-5 border-success">{{ $bahan->status }}</span>
+                    @endif
                 </td>
             </tr>
 
@@ -141,23 +146,25 @@
                 </div>
             </div>
 
-            {{--  MODAL APPROVE  --}}
-            <div class="modal fade" id="modalApprove{{ $bahan->id }}" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
+            {{--  MODAL BATAL  --}}
+            <div class="modal fade" id="modalBatal{{ $bahan->id }}" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
                 <div class="modal-dialog">
                   <div class="modal-content">
                     <div class="modal-header">
-                      <h1 class="modal-title fs-5" id="modalLabel">Approve</h1>
+                      <h1 class="modal-title fs-5" id="modalLabel">Batalkan Pengambilan</h1>
                       <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
-                    <form method="POST" action="{{ route('approveBahan', $bahan->id) }}">
+                    <form method="POST" action="{{ route('batalkanPengambilan', $bahan->id) }}" enctype="multipart/form-data">
                         @csrf
                         @method('PUT')
                     <div class="modal-body">
-                        <span>Apakah Anda Ingin Approve Permintaan {{ $bahan->user->nama_lengkap }} untuk mengambil {{ $bahan->bahan->nama_bahan }} ?</span>
+                      <div class="form-group">
+                        <span>Apakah anda ingin Membatalkan Pengambilan ini?</span>
+                      </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="submit" class="btn btn-success" data-bs-dismiss="modal">Approve</button>
-                        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-danger" data-bs-dismiss="modal">Batal Ambil</button>
+                        <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Close</button>
                     </div>
                 </form>
                   </div>

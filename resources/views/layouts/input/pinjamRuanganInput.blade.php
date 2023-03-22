@@ -64,7 +64,9 @@
 
                 <div class="form-group" style="margin-top: 2rem;">
                     <label for="wkt_mulai">Tanggal Mulai Pinjam :</label>
-                    {{ date_default_timezone_set('Asia/Jakarta') }}
+                    @php
+                    date_default_timezone_set('Asia/Jakarta')
+                    @endphp
                     <input type="text" name="wkt_mulai" class="form-control mt-2 text-muted" id="wkt_mulai" value="{{ date('H:i:s') }}" readonly>
                 </div>
 

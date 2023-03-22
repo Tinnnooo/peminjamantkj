@@ -1,6 +1,5 @@
 <?php
 
-use Faker\Guesser\Name;
 use App\Http\Controllers\DataMaster;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -43,7 +42,7 @@ Route::get('/', function () {
 
 Route::middleware(['guest'])->group(function(){
     Route::get('/login', [LoginController::class, 'index'])->name('login');
-    Route::post('/login', [LoginController::class, 'authenticate']);
+    Route::post('/login', [LoginController::class, 'authenticate'])->name('authenticate');
 });
 
 Route::middleware(['auth', 'role:admin'])->group(function(){
@@ -62,6 +61,7 @@ Route::middleware(['auth', 'role:admin'])->group(function(){
 
     // BARANG
     Route::get('/admin/datamaster/barang', [DataMaster::class, 'barang'])->name('barang');
+    Route::get('/admin/datamaster/barang/search', [DataMaster::class, 'searchBarang'])->name('searchBarang');
     Route::post('/admin/datamaster/barang', [BarangController::class, 'tambahBarang'])->name('tambah_barang');
     Route::put('/admin/datamaster/barang/{id}', [BarangController::class, 'editBarang'])->name('edit_barang');
     Route::put('/admin/datamaster/barang/foto/{id}', [BarangController::class, 'updateFoto'])->name('update_foto');
@@ -69,9 +69,9 @@ Route::middleware(['auth', 'role:admin'])->group(function(){
 
     // RUANGAN
     Route::get('/admin/datamaster/ruangan', [DataMaster::class, 'ruangan'])->name('ruangan');
-    Route::post('/admin/datamaste/ruangan', [RuanganController::class, 'tambahRuangan'])->name('tambah_ruangan');
-    Route::put('/admin/datamaste/ruang/{id}', [RuanganController::class, 'editRuangan'])->name('edit_ruangan');
-    Route::delete('/admin/datamaste/ruang/{id}', [RuanganController::class, 'hapusRuangan'])->name('hapus_ruangan');
+    Route::post('/admin/datamaster/ruangan', [RuanganController::class, 'tambahRuangan'])->name('tambah_ruangan');
+    Route::put('/admin/datamaster/ruang/{id}', [RuanganController::class, 'editRuangan'])->name('edit_ruangan');
+    Route::delete('/admin/datamaster/ruang/{id}', [RuanganController::class, 'hapusRuangan'])->name('hapus_ruangan');
 
     // BAHAN
     Route::get('/admin/datamaster/bahan', [DataMaster::class, 'bahan'])->name('bahan');
@@ -99,7 +99,7 @@ Route::middleware(['auth', 'role:admin'])->group(function(){
     Route::get('/admin/datapeminjaman/ruangankembali', [PinjamRuanganController::class, 'ruanganKembali'])->name('ruanganKembali');
 
     // AMBIL BAHAN
-    Route::get('/admin/ambilbahan', [AmbilBahanController::class, 'index'])->name('ambilBahan');
+    Route::get('/admin/ambilbahan', [AmbilBahanController::class, 'index'])->name('admin.ambilBahan');
     Route::put('/admin/ambilbahan/{id}', [AmbilBahanController::class, 'approveBahan'])->name('approveBahan');
 
     // PENGGUNA
@@ -136,6 +136,13 @@ Route::middleware(['auth', 'role:guru'])->group(function(){
     Route::get('guru/pinjamruangan/form', [PinjamRuanganController::class, 'pinjamRuangan'])->name('inputPinjamRuanganGuru');
 
     Route::post('guru/pinjamruangan/kirimPinjaman', [PinjamRuanganController::class, 'kirimPinjaman'])->name('kirimPinjamanRuanganGuru');
+
+    // AMBIL BAHAN
+    Route::get('guru/ambilbahan', [AmbilBahanController::class, 'ambilBahan'])->name('guru.ambilBahan');
+    Route::get('guru/ambilbahan/form', [AmbilBahanController::class, 'ambilBahan'])->name('tambahAmbilBahan');
+
+    Route::put('guru/ambilbahan/batalkanPengambilan/{id}', [AmbilBahanController::class, 'batalkanPengambilan'])->name('batalkanPengambilan');
+    Route::post('guru/ambilbahan/kirimAmbilBahan', [AmbilBahanController::class, 'kirimAmbilBahan'])->name('kirimAmbilBahan');
 });
 
 Route::middleware(['auth', 'role:user'])->group(function(){

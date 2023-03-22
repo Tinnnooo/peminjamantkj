@@ -15,6 +15,8 @@
 
     {{--  FOTAWESOME  --}}
     <link rel="stylesheet" href="{{ asset('fontawesome/css/all.css') }}">
+
+    <link rel="stylesheet" href="{{ asset('boxicons/css/boxicons.css') }}">
 </head>
 <body>
     @include('layouts.alert')

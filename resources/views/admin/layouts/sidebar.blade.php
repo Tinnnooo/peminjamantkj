@@ -97,7 +97,7 @@
 
                     {{--  PINJAM RUANGAN  --}}
                     <li class="nav-item">
-                        <a href="{{ auth()->user()->hasRole('guru') ? route('pinjamRuanganGuru') : route('pinjamRuanganUser') }}" class="nav_link {{ request()->is('*/pinjamruangan') ? 'active' : ''}}">
+                        <a href="{{ auth()->user()->hasRole('guru') ? route('pinjamRuanganGuru') : route('pinjamRuanganUser') }}" class="nav_link {{ request()->is('*/pinjamruangan') ? 'active' : ''}} {{ request()->is('*/pinjamruangan/*') ? 'active' : '' }}">
                             <i class="bx bx-home-alt-2 nav_icon"></i>
                             <span class="nav_name">Pinjam Ruangan</span>
                         </a>
@@ -107,7 +107,7 @@
                     {{--  AMBIL BAHAN  --}}
                     @if(auth()->user()->hasAnyRole(['admin', 'guru']))
                     <li class="nav-item">
-                        <a href="{{ route('ambilBahan') }}" class="nav_link {{ request()->is('*/ambilbahan') ? 'active' : ''}}">
+                        <a href="{{ auth()->user()->hasRole('admin') ? route('admin.ambilBahan') : route('guru.ambilBahan') }}" class="nav_link {{ request()->is('*/ambilbahan') ? 'active' : ''}} {{ request()->is('*/ambilbahan/*') ? 'active' : '' }}">
                             <i class='bx bxs-widget nav_icon'></i>
                             <span class="nav_name">Ambil Bahan</span>
                         </a>

@@ -5,6 +5,8 @@
 
     @if(request()->is('admin/datamaster/barang'))
         @include('admin.datamaster.layouts.barang')
+    @elseif(request()->is('admin/datamaster/barang/*'))
+        @include('admin.datamaster.layouts.barang')
     @elseif(request()->is('admin/datamaster/ruangan'))
         @include('admin.datamaster.layouts.ruangan')
     @elseif(request()->is('admin/datamaster/bahan'))

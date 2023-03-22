@@ -64,6 +64,8 @@ document.addEventListener("DOMContentLoaded", function(event) {
 // DATALIST PINJAMBARANG
 const inputPinjaman = document.getElementById('inputPinjaman');
 const optionPinjaman = document.getElementById('optionPinjaman');
+const stokInput = document.getElementById('stok');
+const deskripsiBahan = document.getElementById('deskripsiBahan');
 
 inputPinjaman.addEventListener('focus', function () {
   optionPinjaman.style.display = 'block';
@@ -81,7 +83,12 @@ inputPinjaman.addEventListener('focusout', function() {
     inputPinjaman.value = event.target.value;
     optionPinjaman.style.display = 'none';
     inputPinjaman.style.borderRadius = "5px";
+    if(event.target.getAttribute('data-stok') && event.target.getAttribute('data-deskripsi')){
+        stokInput.value = event.target.getAttribute('data-stok');
+    deskripsiBahan.value = event.target.getAttribute('data-deskripsi');
+    }
   });
+
 
 
 //   DATALIST GURU

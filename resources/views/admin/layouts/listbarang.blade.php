@@ -40,25 +40,25 @@
                 @foreach ($pinjambarang as $index => $barang)
                     <tr>
                         <th scope="row">{{ $no++ }}</th>
-                        <td>{{ $barang->barang->nama_barang }}</td>
-                        <td>{{ $barang->user->nama_lengkap }}</td>
-                        <td>
+                        <td style="width: 30%;">{{ $barang->barang->nama_barang }}</td>
+                        <td style="width: 30%;">{{ $barang->user->nama_lengkap }}</td>
+                        <td style="width: 20%;">
                             @if($barang->status == 'menunggu')
-                            <span class="bg-danger text-white rounded-2 border-success">{{ $barang->status }}</span>
+                            <span class="bg-danger text-white rounded-2 border-success p-1 d-flex">{{ $barang->status }}</span>
                             @elseif(Str::contains($barang->status, 'approve'))
-                            <span class="bg-success text-white rounded-2 border-success">{{ $barang->status }}</span>
+                            <span class="bg-success text-white rounded-2 border-success d-flex">{{ $barang->status }}</span>
                             @endif
                         </td>
-                        <td>
+                        <td style="width: 90%;">
+                            @if ($barang->status === 'menunggu')
                             <form action="{{ auth()->user()->hasRole('admin') ? route('admin.barangApprove', $barang->id) : route('guru.approveBarang', $barang->id) }}" method="POST" class="d-inline-block">
                                 @csrf
                                     @method('PUT')
-                            @if ($barang->status === 'menunggu')
-                                    <button type="submit" class="btn btn-primary btn-sm">Approve</button>
+                                    <button type="submit" class="btn btn-primary btn-sm d-flex">Approve</button>
+                                </form>
                             @elseif (Str::contains($barang->status, 'approve'))
-                                <span class="bg-success text-white rounded-2 border-success">{{ $barang->status }}</span>
+                                <span class="bg-success text-white rounded-2 border-success d-flex">{{ $barang->status }}</span>
                             @endif
-                        </form>
                         </td>
                     </tr>
                 @endforeach

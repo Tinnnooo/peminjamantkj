@@ -4,7 +4,13 @@
     @include('admin.layouts.headers')
     @include('admin.layouts.sidebar')
 
-    @include('ambil_bahan.admin.ambilbahan')
+    @if (request()->is('admin/ambilbahan'))
+        @include('ambil_bahan.admin.ambilbahan')
+    @elseif (request()->is('guru/ambilbahan'))
+        @include('guru.ambilBahan')
+    @elseif(request()->is('guru/ambilbahan/form'))
+        @include('guru.ambilBahanInput')
+    @endif
 
     @include('admin.layouts.footer')
 </section>

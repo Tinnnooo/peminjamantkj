@@ -1,7 +1,7 @@
 <section class="list_barang_section" style='margin-top: 5rem;'>
-    <div class="list_header d-flex">
-        <div class="list-title">
-            <h2 class="list-title_text">List Barang</h2>
+    <div class="list_header_barang d-flex">
+        <div class="list_barang_title">
+            <h2 class="list_barang_title_text">List Barang</h2>
         </div>
 
         <div class="form-add">
@@ -29,7 +29,11 @@
         </div>
 
         <div class="col-md-auto" >
-                <input type="text" name="search" id="search" placeholder="Search...">
+          <form action="{{ route('searchBarang') }}" method="post">
+            @method('get')
+            @csrf
+            <input type="text" name="search" id="search" placeholder="Search...">
+          </form>
         </div>
     </div>
 

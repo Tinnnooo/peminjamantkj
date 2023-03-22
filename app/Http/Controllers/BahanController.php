@@ -49,7 +49,7 @@ class BahanController extends Controller
             'nama_bahan' => 'required',
             'stok' => 'required',
             'deskripsi' => 'required',
-            'foto' => 'required|image|file|mimes:jpg,jpeg,png|max:2048',
+            'foto' => 'image|file|mimes:jpg,jpeg,png|max:2048',
         ]);
 
         if($validator->fails()){
@@ -74,9 +74,9 @@ class BahanController extends Controller
             $image->save($path_file);
 
             Storage::delete('images/'.$bahan->foto);
+            $bahan->foto = $new_file;
         }
-
-        $bahan->foto = $new_file;
+        
         $bahan->save();
 
         Alert::success('Berhasil!', 'Data Bahan telah di ubah.');
