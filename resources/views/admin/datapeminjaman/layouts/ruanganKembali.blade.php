@@ -1,13 +1,13 @@
 <section class="list_barang_section" style='margin-top: 5rem;'>
-    <div class="list_header d-flex">
-        <div class="list-title">
-            <h2 class="list-title_text">Data Ruangan Kembali</h2>
+    <div class="list_header_barang d-flex">
+        <div class="list_barangtitle">
+            <h2 class="list_barang_title_text">Data Ruangan Kembali</h2>
         </div>
     </div>
 
     <div class="row justify-content-between">
+        <form class="form-inline d-flex justify-content-between" method="GET" action="{{ route('ruanganKembali') }}">
         <div class="col-md-auto">
-            <form class="form-inline" method="GET" action="{{ route('ruanganKembali') }}">
                 <label class="my-1 mr-2" for="rowsRuangan">Show</label>
                 <select class="custom-select my-1 mr-sm-2" name="rowsRuangan" onchange="this.form.submit()">
                     <option value="10" {{ $rowsRuangan == 10 ? 'selected' : '' }}>10</option>
@@ -18,12 +18,13 @@
                 <label class="my-1 mr-2" for="rowsRuangan">entries</label>
 
                 <input type="hidden" name="page" value="{{ $ruanganKembali->currentPage() }}">
-            </form>
-        </div>
+            </div>
 
-        <div class="col-md-auto" >
-                <input type="text" name="search" id="search" placeholder="Search...">
-        </div>
+            <div class="col-md-auto d-flex search_box" >
+                <span>Search:</span>
+                <input type="text" name="search" id="search" class="form-control" placeholder="Search..." value="{{ $search }}">
+            </div>
+        </form>
     </div>
 
     <table class="table">
@@ -55,14 +56,14 @@
                 <td style="width: 12%;">{{ $ruangan->wkt_selesai }}</td>
                 <td style="width: 15%;">
                     @if($ruangan->status == 'menunggu')
-                    <span class="bg-danger text-white p-1 rounded-5 border-success">{{ $ruangan->status }}</span>
+                    <span class="bg-danger text-white p-1 d-flex justify-content-center border-success">{{ $ruangan->status }}</span>
                     @elseif($ruangan->status !== 'menunggu')
-                    <span class="bg-success text-white p-1 rounded-5 border-success">{{ $ruangan->status }}</span>
+                    <span class="bg-success text-white p-1 d-flex justify-content-center border-success">{{ $ruangan->status }}</span>
                     @endif
                 </td>
                 <td style="width: 90%;">
                     @if (Str::contains($ruangan->status, 'selesai'))
-                        <span class="bg-success text-white p-1 rounded-5 border-success">{{ $ruangan->status }}</span>
+                        <span class="bg-success text-white p-1 d-flex justify-content-center border-success">{{ $ruangan->status }}</span>
                     @endif
                 </td>
             </tr>

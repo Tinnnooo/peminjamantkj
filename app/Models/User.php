@@ -24,6 +24,8 @@ class User extends Authenticatable
         'nphp',
         'username',
         'password',
+        'rfid',
+        'status',
     ];
 
     /**

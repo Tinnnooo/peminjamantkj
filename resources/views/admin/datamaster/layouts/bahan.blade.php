@@ -1,7 +1,7 @@
 <section class="list_barang_section" style='margin-top: 5rem;'>
-    <div class="list_header d-flex">
-        <div class="list-title">
-            <h2 class="list-title_text">List Bahan</h2>
+    <div class="list_header_barang d-flex">
+        <div class="list_barang_title">
+            <h2 class="list_barang_title_text">List Bahan</h2>
         </div>
 
         <div class="form-add">
@@ -9,12 +9,13 @@
                 <i class='bx bx-plus'></i>
                 <span class="add_icon">Tambah Bahan</span>
             </button>
+            <a href="{{ route('bahan.export') }}" class="btn btn-sm btn-info text-white text-center"><i class='bx bx-export' style="margin-right: 8px;"></i>Export Data</a>
         </div>
     </div>
 
     <div class="row justify-content-between">
+        <form class="form-inline d-flex justify-content-between" method="GET" action="{{ route('bahan') }}">
         <div class="col-md-auto">
-            <form class="form-inline" method="GET" action="{{ route('barang') }}">
                 <label class="my-1 mr-2" for="rowsBahan">Show</label>
                 <select class="custom-select my-1 mr-sm-2" name="rowsBahan" onchange="this.form.submit()">
                     <option value="10" {{ $rowsBahan == 10 ? 'selected' : '' }}>10</option>
@@ -25,12 +26,13 @@
                 <label class="my-1 mr-2" for="rowsBahan">entries</label>
 
                 <input type="hidden" name="page" value="{{ $bahans->currentPage() }}">
-            </form>
-        </div>
+            </div>
 
-        <div class="col-md-auto" >
-                <input type="text" name="search" id="search" placeholder="Search...">
-        </div>
+            <div class="col-md-auto d-flex search_box" >
+                <span>Search:</span>
+                <input type="text" name="search" id="search" class="form-control" placeholder="Search..." value="{{ $search }}">
+            </div>
+        </form>
     </div>
 
     <table class="table">

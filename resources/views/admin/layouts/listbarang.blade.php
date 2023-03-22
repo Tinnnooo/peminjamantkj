@@ -40,13 +40,13 @@
                 @foreach ($pinjambarang as $index => $barang)
                     <tr>
                         <th scope="row">{{ $no++ }}</th>
-                        <td style="width: 30%;">{{ $barang->barang->nama_barang }}</td>
-                        <td style="width: 30%;">{{ $barang->user->nama_lengkap }}</td>
-                        <td style="width: 20%;">
+                        <td style="width: 25%;">{{ $barang->barang->nama_barang }}</td>
+                        <td style="width: 20%;">{{ $barang->user->nama_lengkap }}</td>
+                        <td style="width: 24%;">
                             @if($barang->status == 'menunggu')
-                            <span class="bg-danger text-white rounded-2 border-success p-1 d-flex">{{ $barang->status }}</span>
+                            <span class="bg-danger text-white justify-content-center border-success p-1 d-flex">{{ $barang->status }}</span>
                             @elseif(Str::contains($barang->status, 'approve'))
-                            <span class="bg-success text-white rounded-2 border-success d-flex">{{ $barang->status }}</span>
+                            <span class="bg-success text-white justify-content-center border-success d-flex">{{ $barang->status }}</span>
                             @endif
                         </td>
                         <td style="width: 90%;">
@@ -57,7 +57,7 @@
                                     <button type="submit" class="btn btn-primary btn-sm d-flex">Approve</button>
                                 </form>
                             @elseif (Str::contains($barang->status, 'approve'))
-                                <span class="bg-success text-white rounded-2 border-success d-flex">{{ $barang->status }}</span>
+                                <span class="bg-success text-white justify-content-center border-success d-flex">{{ $barang->status }}</span>
                             @endif
                         </td>
                     </tr>

@@ -12,10 +12,19 @@ class DataPengguna extends Controller
     public function index(Request $request){
 
         $rowsUser = $request->query('rowsUser', '10');
+        $search = $request->input('search');
+
+        if($search !== null){
+                $searchName = '%'.$search.'%';
+                $user = User::where('nama_lengkap', 'like', $searchName)->paginate($rowsUser);
+        } else if ($search == null){
+                $user = User::paginate($rowsUser);
+        }
 
         return view('admin.pengguna.index', [
-            'users' => User::paginate($rowsUser),
+            'users' => $user,
             'rowsUser' => $rowsUser,
+            'search'=> $search,
         ]);
     }
 

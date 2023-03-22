@@ -25,7 +25,7 @@
             <div class="input_main mt-4">
                 <div class="form-group datalist_barang">
                     <label for="nama_bahan">Nama Bahan :</label>
-                    <input class="form-control mt-2" id="inputPinjaman" list="optionPinjaman" name="nama_bahan" placeholder="-- Pilih Bahan --" autocomplete="off">
+                    <input class="form-control mt-2" id="inputPinjaman" name="nama_bahan" placeholder="-- Pilih Bahan --" autocomplete="off">
                     <datalist id="optionPinjaman">
                         @foreach($bahan as $bhn)
                             <option value="{{ $bhn->nama_bahan }}" data-stok="{{ $bhn->stok }}" data-deskripsi="{{ $bhn->deskripsi }}">{{ $bhn->nama_bahan }}</option>

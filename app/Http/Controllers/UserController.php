@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\UsersExport;
 use App\Models\User;
 use App\Models\Barang;
 use App\Models\Ruangan;
@@ -9,6 +10,7 @@ use App\Models\Pinjambarang;
 use Illuminate\Http\Request;
 use App\Models\Pinjamruangan;
 use Illuminate\Support\Facades\Auth;
+use Maatwebsite\Excel\Facades\Excel;
 
 class UserController extends Controller
 {

@@ -24,10 +24,24 @@ class PinjamBarangController extends Controller
     public function barangDipinjam(Request $request){
 
         $rowsBarang = $request->query('rowsBarang');
+        $search = $request->input('search');
+
+            if($search !== null){
+                $searchLike = '%'.$search.'%';
+                $searchName = Barang::where('nama_barang', 'like', $searchLike)->pluck('id');
+                if($searchName){
+                    $pinjambarang = Pinjambarang::where('status', '<>', 'selesai')->whereIn('id_barang', $searchName)->paginate($rowsBarang);
+                } else {
+                    $pinjambarang = Pinjambarang::where('status', '<>', 'selesai')->where('id_barang', '0')->paginate($rowsBarang);
+                }
+            } else if ($search == null){
+                $pinjambarang = Pinjambarang::where('status', '<>', 'selesai')->paginate($rowsBarang);
+            }
 
         return view('admin.datapeminjaman.index', [
-            'pinjambarang' => Pinjambarang::where('status', !'selesai')->paginate($rowsBarang),
+            'pinjambarang' => $pinjambarang,
             'rowsBarang' => $rowsBarang,
+            'search' => $search,
         ]);
     }
 
@@ -50,10 +64,24 @@ class PinjamBarangController extends Controller
     public function barangKembali(Request $request){
 
         $rowsBarang = $request->query('rowsBarang');
+        $search = $request->input('search');
+
+            if($search !== null){
+                $searchLike = '%'.$search.'%';
+                $searchName = Barang::where('nama_barang', 'like', $searchLike)->pluck('id');
+                if($searchName){
+                    $pinjambarang = Pinjambarang::where('status', 'selesai')->whereIn('id_barang', $searchName)->paginate($rowsBarang);
+                } else {
+                    $pinjambarang = Pinjambarang::where('status', 'selesai')->where('id_barang', '0')->paginate($rowsBarang);
+                }
+            } else if ($search == null){
+                $pinjambarang = Pinjambarang::where('status', 'selesai')->paginate($rowsBarang);
+            }
 
         return view('admin.datapeminjaman.index',[
-            'barangKembali' => Pinjambarang::where('status', !'dibatalkan')->orWhere('status', 'LIKE' ,'%selesai%')->paginate($rowsBarang),
-            'rowsBarang' => $rowsBarang
+            'barangKembali' => $pinjambarang,
+            'rowsBarang' => $rowsBarang,
+            'search' => $search,
         ]);
     }
 
@@ -61,10 +89,24 @@ class PinjamBarangController extends Controller
 
     public function barangBatal(Request $request){
         $rowsBarang = $request->query('rowsBarang');
+        $search = $request->input('search');
+
+            if($search !== null){
+                $searchLike = '%'.$search.'%';
+                $searchName = Barang::where('nama_barang', 'like', $searchLike)->pluck('id');
+                if($searchName){
+                    $pinjambarang = Pinjambarang::where('status', 'like', '%batal%')->whereIn('id_barang', $searchName)->paginate($rowsBarang);
+                } else {
+                    $pinjambarang = Pinjambarang::where('status', 'like', '%batal%')->where('id_barang', '0')->paginate($rowsBarang);
+                }
+            } else if ($search == null){
+                $pinjambarang = Pinjambarang::where('status', 'like', '%batal%')->paginate($rowsBarang);
+            }
 
         return view('admin/datapeminjaman.index', [
-            'barangBatal' => Pinjambarang::where('status', 'LIKE', '%batal%')->paginate($rowsBarang),
+            'barangBatal' => $pinjambarang,
             'rowsBarang' => $rowsBarang,
+            'search' => $search,
         ]);
     }
 
@@ -75,14 +117,28 @@ class PinjamBarangController extends Controller
     public function pinjamBarang(Request $request){
         $rowsBarang = $request->query('rowsBarang', 10);
         $role = Role::where('name', 'guru')->first();
+        $search = $request->input('search');
 
-        $dataPinjam = Pinjambarang::where('id_user', Auth::user()->id)->paginate($rowsBarang);
+            if($search !== null){
+                $searchLike = '%'.$search.'%';
+                $searchName = Barang::where('nama_barang', 'like', $searchLike)->pluck('id');
+                if($searchName){
+                    $dataPinjam = Pinjambarang::where('id_user', Auth::user()->id)->whereIn('id_barang', $searchName)->paginate($rowsBarang);
+                } else {
+                    $dataPinjam = Pinjambarang::where('id_user', Auth::user()->id)->where('id_barang', '0')->paginate($rowsBarang);
+                }
+            } else if ($search == null){
+                $dataPinjam = Pinjambarang::where('id_user', Auth::user()->id)->paginate($rowsBarang);
+            }
+
+
 
         return view('user.index', [
             'pinjambarang' =>  $dataPinjam,
             'rowsBarang' => $rowsBarang,
             'barang' => Barang::where('status', 'free')->where('stok', 1)->get(),
             'guru' => User::role($role)->get(),
+            'search' => $search,
         ]);
     }
 

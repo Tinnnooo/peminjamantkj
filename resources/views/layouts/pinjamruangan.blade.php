@@ -13,8 +13,8 @@
     </div>
 
     <div class="row justify-content-between">
+        <form class="form-inline d-flex justify-content-between" method="GET" action="{{ auth()->user()->hasRole('guru') ? route('pinjamRuanganGuru') : route('pinjamRuanganUser') }}">
         <div class="col-md-auto">
-            <form class="form-inline" method="GET" action="{{ auth()->user()->hasRole('guru') ? route('pinjamRuanganGuru') : route('pinjamRuanganUser') }}">
                 <label class="my-1 mr-2" for="rowsRuangan">Show</label>
                 <select class="custom-select my-1 mr-sm-2" name="rowsRuangan" onchange="this.form.submit()">
                     <option value="10" {{ $rowsRuangan == 10 ? 'selected' : '' }}>10</option>
@@ -25,12 +25,13 @@
                 <label class="my-1 mr-2" for="rowsRuangan">entries</label>
 
                 <input type="hidden" name="page" value="{{ $pinjamruangan->currentPage() }}">
-            </form>
-        </div>
+            </div>
 
-        <div class="col-md-auto" >
-                <input type="text" name="search" id="search" placeholder="Search...">
-        </div>
+            <div class="col-md-auto d-flex search_box" >
+                <span>Search:</span>
+                <input type="text" name="search" id="search" class="form-control" placeholder="Search..." value="{{ $search }}">
+            </div>
+        </form>
     </div>
 
     <table class="table">
@@ -54,50 +55,58 @@
             @foreach ($pinjamruangan as $ruangan)
             <tr>
                 <th scope="row">{{ $no++ }}</th>
-                <td style="width: 12%">{{ $ruangan->guru->nama_lengkap }}</td>
-                <td style="width: 12%;">{{ $ruangan->ruangan->nama_ruangan }}</td>
+                <td style="width: 13%">{{ $ruangan->guru->nama_lengkap }}</td>
+                <td style="width: 14%;">{{ $ruangan->ruangan->nama_ruangan }}</td>
                 <td style="width: 11%;">{{ $ruangan->tgl_mulai }}</td>
                 <td style="width: 11%;">{{ $ruangan->wkt_mulai }}</td>
                 <td style="width: 11%;">{{ $ruangan->tgl_selesai }}</td>
                 <td style="width: 11%;">{{ $ruangan->wkt_selesai }}</td>
                 <td style="width: 13%;">
                   @if($ruangan->status == 'menunggu')
-                  <span class="bg-danger text-white p-1 rounded-5 border-success">{{ $ruangan->status }}</span>
+                  <span class="bg-danger text-white p-1 d-flex justify-content-center border-success">{{ $ruangan->status }}</span>
                   @elseif($ruangan->status === 'batal pinjam')
-                  <span class="bg-warning text-white p-1 rounded-5 border-success">{{ $ruangan->status }}</span>
+                  <span class="bg-warning text-white p-1 d-flex justify-content-center border-success">{{ $ruangan->status }}</span>
                   @elseif($ruangan->status === 'selesai')
-                  <span class="bg-success text-white p-1 rounded-5 border-success">{{ $ruangan->status }}</span>
+                  <span class="bg-success text-white p-1 d-flex justify-content-center border-success">{{ $ruangan->status }}</span>
                   @elseif(Str::contains($ruangan->status, 'approve'))
-                  <span class="bg-success text-white p-1 rounded-5 border-success">{{ $ruangan->status }}</span>
+                  <span class="bg-success text-white p-1 d-flex justify-content-center border-success">{{ $ruangan->status }}</span>
                   @endif
                 </td>
                 <td style="width: 90%;">
                   @if ($ruangan->status === 'menunggu')
-                        <button type="button" class="btn btn-success btn-sm" data-bs-toggle="modal" data-bs-target="#modal{{ $ruangan->id }}">
-                            <i style="padding: 3.5px;" class="fa-solid fa-eye"></i>
-                        </button>
+                  <div class="d-flex justify-content-around">
+                      <button type="button" class="btn btn-success btn-sm" data-bs-toggle="modal" data-bs-target="#modal{{ $ruangan->id }}">
+                          <i style="padding: 3.5px;" class="fa-solid fa-eye"></i>
+                      </button>
 
-                        <button type="button" class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#modalBatal{{ $ruangan->id }}">
-                            <i style="padding: 3.5px;" class='bx bxs-trash'></i>
-                        </button>
+                      <button type="button" class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#modalBatal{{ $ruangan->id }}">
+                          <i style="padding: 3.5px;" class='bx bxs-trash'></i>
+                      </button>
+                  </div>
                   @elseif ($ruangan->status === 'batal pinjam')
-                    <button type="button" class="btn btn-success btn-sm" data-bs-toggle="modal" data-bs-target="#modal{{ $ruangan->id }}">
-                      <i style="padding: 3.5px;" class="fa-solid fa-eye"></i>
-                    </button>
-                    <span class="bg-warning text-white p-1 rounded-5 border-success">{{ $ruangan->status }}</span>
+                  <div class="d-flex justify-content-around">
+                      <button type="button" class="btn btn-success btn-sm" data-bs-toggle="modal" data-bs-target="#modal{{ $ruangan->id }}">
+                        <i style="padding: 3.5px;" class="fa-solid fa-eye"></i>
+                      </button>
+                      <span class="bg-warning text-white p-1 d-flex justify-content-center border-success">{{ $ruangan->status }}</span>
+                  </div>
                   @elseif($ruangan->status === 'selesai')
-                    <button type="button" class="btn btn-success btn-sm" data-bs-toggle="modal" data-bs-target="#modal{{ $ruangan->id }}">
-                      <i style="padding: 3.5px;" class="fa-solid fa-eye"></i>
-                    </button>
-                    <span class="bg-success text-white p-1 rounded-5 border-success">{{ $ruangan->status }}</span>
+                  <div class="d-flex justify-content-around">
+                      <button type="button" class="btn btn-success btn-sm" data-bs-toggle="modal" data-bs-target="#modal{{ $ruangan->id }}">
+                        <i style="padding: 3.5px;" class="fa-solid fa-eye"></i>
+                      </button>
+                      <span class="bg-success text-white p-1 d-flex justify-content-center border-success">{{ $ruangan->status }}</span>
+                  </div>
                   @elseif(Str::contains($ruangan->status, 'approve'))
-                  <button type="button" class="btn btn-success btn-sm" data-bs-toggle="modal" data-bs-target="#modal{{ $ruangan->id }}">
-                    <i style="padding: 3.5px;" class="fa-solid fa-eye"></i>
-                  </button>
+                  <div class="d-flex justify-content-around">
+                      <button type="button" class="btn btn-success btn-sm" data-bs-toggle="modal" data-bs-target="#modal{{ $ruangan->id }}">
+                        <i style="padding: 3.5px;" class="fa-solid fa-eye"></i>
+                      </button>
 
-                  <button type="button" class="btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#modalKembalikan{{ $ruangan->id }}">
-                    <i style="padding: 3.5px;" class='bx bx-rotate-left text-white'></i>
-                </button>
+                      <button type="button" class="btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#modalKembalikan{{ $ruangan->id }}">
+                        <i style="padding: 3.5px;" class='bx bx-rotate-left text-white'></i>
+                    </button>
+                  </div>
                   @endif
                 </td>
             </tr>

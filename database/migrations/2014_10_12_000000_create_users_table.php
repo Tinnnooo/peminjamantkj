@@ -20,6 +20,8 @@ return new class extends Migration
             $table->integer('nohp');
             $table->string('username');
             $table->string('password');
+            $table->string('rfid')->default('0');
+            $table->string('status')->default('tidak aktif');
             $table->timestamps();
         });
     }

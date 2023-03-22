@@ -12,8 +12,11 @@ use App\Http\Controllers\LoginController;
 use App\Http\Controllers\BarangController;
 use App\Http\Controllers\RuanganController;
 use App\Http\Controllers\AmbilBahanController;
+use App\Http\Controllers\ExportController;
+use App\Http\Controllers\ExportDataController;
 use App\Http\Controllers\PinjamBarangController;
 use App\Http\Controllers\PinjamRuanganController;
+use App\Models\Pinjambarang;
 
 /*
 |--------------------------------------------------------------------------
@@ -61,11 +64,12 @@ Route::middleware(['auth', 'role:admin'])->group(function(){
 
     // BARANG
     Route::get('/admin/datamaster/barang', [DataMaster::class, 'barang'])->name('barang');
-    Route::get('/admin/datamaster/barang/search', [DataMaster::class, 'searchBarang'])->name('searchBarang');
     Route::post('/admin/datamaster/barang', [BarangController::class, 'tambahBarang'])->name('tambah_barang');
     Route::put('/admin/datamaster/barang/{id}', [BarangController::class, 'editBarang'])->name('edit_barang');
     Route::put('/admin/datamaster/barang/foto/{id}', [BarangController::class, 'updateFoto'])->name('update_foto');
     Route::delete('/admin/datamaster/barang/{id}', [BarangController::class, 'hapusBarang'])->name('hapus_barang');
+
+    Route::get('/admin/barang/export', [ExportDataController::class, 'exportBarang'])->name('barang.export');
 
     // RUANGAN
     Route::get('/admin/datamaster/ruangan', [DataMaster::class, 'ruangan'])->name('ruangan');
@@ -73,17 +77,23 @@ Route::middleware(['auth', 'role:admin'])->group(function(){
     Route::put('/admin/datamaster/ruang/{id}', [RuanganController::class, 'editRuangan'])->name('edit_ruangan');
     Route::delete('/admin/datamaster/ruang/{id}', [RuanganController::class, 'hapusRuangan'])->name('hapus_ruangan');
 
+    Route::get('/admin/ruangan/export', [ExportDataController::class, 'exportRuangan'])->name('ruangan.export');
+
     // BAHAN
     Route::get('/admin/datamaster/bahan', [DataMaster::class, 'bahan'])->name('bahan');
     Route::post('/admin/datamaster/bahan', [BahanController::class, 'tambahBahan'])->name('tambah_bahan');
     Route::put('/admin/datamaster/bahan/{id}', [BahanController::class, 'editBahan'])->name('edit_bahan');
     Route::delete('/admin/datamaster/bahan/{id}', [BahanController::class, 'hapusBahan'])->name('hapus_bahan');
 
+    Route::get('/admin/bahan/export', [ExportDataController::class, 'exportBahan'])->name('bahan.export');
+
     // DATA PEMINJAMAN
 
     // BARANG DIPINJAM
     Route::get('/admin/datapeminjaman/barangdipinjam', [PinjamBarangController::class, 'barangDipinjam'])->name('barangDipinjam');
     Route::put('/admin/datapeminjaman/barangdipinjam/{id}', [PinjamBarangController::class, 'approvePinjamBarang'])->name('approvePinjamBarang');
+
+    Route::get('/admin/export/pinjambarang', [ExportDataController::class, 'exportPinjambarang'])->name('export.pinjambarang');
 
     // BARANG KEMBALI
     Route::get('/admin/datapeminjaman/barangkembali', [PinjamBarangController::class, 'barangKembali'])->name('barangKembali');

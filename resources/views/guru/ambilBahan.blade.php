@@ -1,4 +1,4 @@
-<section class="list_barang_section" style='margin-top: 5rem;'>
+div<section class="list_barang_section" style='margin-top: 5rem;'>
     <div class="list_header d-flex">
         <div class="list-title">
             <h2 class="list-title_text">List Ambil Bahan</h2>
@@ -13,8 +13,8 @@
     </div>
 
     <div class="row justify-content-between">
+        <form class="form-inline d-flex justify-content-between" method="GET" action="{{ auth()->user()->hasRole('admin') ? route('admin.ambilBahan') : route('guru.ambilBahan') }}">
         <div class="col-md-auto">
-            <form class="form-inline" method="GET" action="{{ auth()->user()->hasRole('admin') ? route('admin.ambilBahan') : route('guru.ambilBahan') }}">
                 <label class="my-1 mr-2" for="rowsBahan">Show</label>
                 <select class="custom-select my-1 mr-sm-2" name="rowsBahan" onchange="this.form.submit()">
                     <option value="10" {{ $rowsBahan == 10 ? 'selected' : '' }}>10</option>
@@ -25,12 +25,13 @@
                 <label class="my-1 mr-2" for="rowsBahan">entries</label>
 
                 <input type="hidden" name="page" value="{{ $ambil_bahan->currentPage() }}">
-            </form>
-        </div>
+            </div>
 
-        <div class="col-md-auto" >
-                <input type="text" name="search" id="search" placeholder="Search...">
-        </div>
+            <div class="col-md-auto d-flex search_box" >
+                <span>Search:</span>
+                <input type="text" name="search" id="search" class="form-control" placeholder="Search..." value="{{ $search }}">
+            </div>
+        </form>
     </div>
 
     <table class="table">
@@ -60,33 +61,39 @@
                 <td style="width: 12%;">{{ $bahan->deskripsi }}</td>
                 <td style="width: 12%;">
                     @if($bahan->status == 'menunggu')
-                    <span class="bg-danger text-white p-1 rounded-5 border-success">{{ $bahan->status }}</span>
+                    <span class="bg-danger text-white p-1 d-flex justify-content-center border-success">{{ $bahan->status }}</span>
                     @elseif($bahan->status == 'batal ambil')
-                    <span class="bg-warning text-white p-1 rounded-5 border-success">{{ $bahan->status }}</span>
+                    <span class="bg-warning text-white p-1 d-flex justify-content-center border-success">{{ $bahan->status }}</span>
                     @elseif(Str::contains($bahan->status, 'approve'))
-                    <span class="bg-success text-white p-1 rounded-5 border-success">{{ $bahan->status }}</span>
+                    <span class="bg-success text-white p-1 d-flex justify-content-center border-success">{{ $bahan->status }}</span>
                     @endif
                 </td>
                 <td style="width: 90%;">
                     @if ($bahan->status === 'menunggu')
+                        <div class="d-flex justify-content-around">
+                            <button type="button" class="btn btn-success btn-sm" data-bs-toggle="modal" data-bs-target="#modal{{ $bahan->id }}">
+                                <i style="padding: 3.5px;" class="fa-solid fa-eye"></i>
+                            </button>
+
+                            <button type="button" class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#modalBatal{{ $bahan->id }}">
+                                <i style="padding: 3.5px;" class='bx bxs-trash'></i>
+                            </button>
+                        </div>
+                    @elseif($bahan->status == 'batal ambil')
+                    <div class="d-flex justify-content-around">
                         <button type="button" class="btn btn-success btn-sm" data-bs-toggle="modal" data-bs-target="#modal{{ $bahan->id }}">
                             <i style="padding: 3.5px;" class="fa-solid fa-eye"></i>
                         </button>
 
-                        <button type="button" class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#modalBatal{{ $bahan->id }}">
-                            <i style="padding: 3.5px;" class='bx bxs-trash'></i>
-                        </button>
-                    @elseif($bahan->status == 'batal ambil')
-                    <button type="button" class="btn btn-success btn-sm" data-bs-toggle="modal" data-bs-target="#modal{{ $bahan->id }}">
-                        <i style="padding: 3.5px;" class="fa-solid fa-eye"></i>
-                    </button>
-
-                    <span class="bg-warning text-white p-1 rounded-5 border-success">{{ $bahan->status }}</span>
+                        <span class="bg-warning text-white p-1 d-flex justify-content-center border-success">{{ $bahan->status }}</span>
+                    </div>
                     @elseif(Str::contains($bahan->status, 'approve'))
-                    <button type="button" class="btn btn-success btn-sm" data-bs-toggle="modal" data-bs-target="#modal{{ $bahan->id }}">
-                        <i style="padding: 3.5px;" class="fa-solid fa-eye"></i>
-                    </button>
-                    <span class="bg-success text-white p-1 rounded-5 border-success">{{ $bahan->status }}</span>
+                    <div class="d-flex justify-content-around">
+                        <button type="button" class="btn btn-success btn-sm" data-bs-toggle="modal" data-bs-target="#modal{{ $bahan->id }}">
+                            <i style="padding: 3.5px;" class="fa-solid fa-eye"></i>
+                        </button>
+                        <span class="bg-success text-white p-1 d-flex justify-content-center border-success">{{ $bahan->status }}</span>
+                    </div>
                     @endif
                 </td>
             </tr>

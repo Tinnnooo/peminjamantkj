@@ -1,4 +1,4 @@
-<section class="list_user_section">
+<section class="list_user_section" style="margin-top: 5rem;">
     <div class="list_header d-flex">
         <div class="list-title">
             <h2 class="list-title_text">List Users</h2>
@@ -14,8 +14,8 @@
 
 
     <div class="row justify-content-between">
+        <form class="form-inline d-flex justify-content-between" method="GET" action="{{ route('pengguna') }}">
         <div class="col-md-auto">
-            <form class="form-inline" method="GET" action="{{ route('pengguna') }}">
                 <label class="my-1 mr-2" for="rowsUser">Show</label>
                 <select class="custom-select my-1 mr-sm-2" name="rowsUser" onchange="this.form.submit()">
                     <option value="10" {{ $rowsUser == 10 ? 'selected' : '' }}>10</option>
@@ -26,8 +26,13 @@
                 <label class="my-1 mr-2" for="rowsUser">entries</label>
 
                 <input type="hidden" name="page" value="{{ $users->currentPage() }}">
-            </form>
-        </div>
+            </div>
+
+            <div class="col-md-auto d-flex search_box" >
+                <span>Search:</span>
+                <input type="text" name="search" id="search" class="form-control" placeholder="Search..." value="{{ $search }}">
+            </div>
+        </form>
     </div>
 
     <table class="table">

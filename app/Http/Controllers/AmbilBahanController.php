@@ -14,10 +14,24 @@ class AmbilBahanController extends Controller
 {
     public function index(Request $request){
         $rowsBahan = $request->query('rowsBahan', 10);
+        $search = $request->input('search');
+
+        if($search !== null){
+            $searchLike = '%'.$search.'%';
+            $searchName = Bahan::where('nama_bahan', 'like', $searchLike)->pluck('id');
+            if($searchName){
+                $ambilbahan = Ambilbahan::whereIn('id_bahan', $searchName)->paginate($rowsBahan);
+            } else {
+                $ambilbahan = Ambilbahan::where('id_bahan', '0')->paginate($rowsBahan);
+            }
+        } else if ($search == null){
+            $ambilbahan = Ambilbahan::paginate($rowsBahan);
+        }
 
         return view('ambil_bahan.admin.index', [
-            'ambil_bahan' => Ambilbahan::paginate($rowsBahan),
+            'ambil_bahan' => $ambilbahan,
             'rowsBahan' => $rowsBahan,
+            'search' => $search,
         ]);
     }
 
@@ -35,12 +49,27 @@ class AmbilBahanController extends Controller
 
     public function ambilBahan(Request $request){
         $rowsBahan = $request->query('rowsBahan', 10);
-        $dataAmbil = Ambilbahan::where('id_user', Auth::user()->id)->paginate($rowsBahan);
+
+        $search = $request->input('search');
+
+            if($search !== null){
+                $searchLike = '%'.$search.'%';
+                $searchName = Bahan::where('nama_bahan', 'like', $searchLike)->pluck('id');
+                if($searchName){
+                    $dataAmbil = Ambilbahan::where('id_user', Auth::user()->id)->whereIn('id_bahan', $searchName)->paginate($rowsBahan);
+                } else {
+                    $dataAmbil = Ambilbahan::where('id_user', Auth::user()->id)->where('id_bahan', '0')->paginate($rowsBahan);
+                }
+            } else if ($search == null){
+                $dataAmbil = Ambilbahan::where('id_user', Auth::user()->id)->paginate($rowsBahan);
+            }
+
 
         return view('ambil_bahan.admin.index', [
             'ambil_bahan' => $dataAmbil,
-            'bahan' => Bahan::where('stok', '>' ,1)->get(),
+            'bahan' => Bahan::where('stok', '>=' ,1)->get(),
             'rowsBahan' => $rowsBahan,
+            'search' => $search,
         ]);
     }
 
@@ -63,21 +92,26 @@ class AmbilBahanController extends Controller
         $user = Auth::user();
 
         if(Hash::check($request->password, $user->password) && $bahan){
-            $ambilbahan = new Ambilbahan();
-            $ambilbahan->id_bahan = $bahan->id;
-            $ambilbahan->id_user = $user->id;
-            $ambilbahan->tgl_ambil = $request->tgl_ambil;
-            $ambilbahan->wkt_ambil = $request->wkt_ambil;
-            $ambilbahan->qty = $request->jumlah;
-            $ambilbahan->deskripsi = $request->untuk;
-            $ambilbahan->status = 'menunggu';
-            $ambilbahan->save();
+            if($request->jumlah > $bahan->stok){
+                Alert::error('Error!', 'Jumlah melebihi stok.');
+                return back();
+            } else {
+                $ambilbahan = new Ambilbahan();
+                $ambilbahan->id_bahan = $bahan->id;
+                $ambilbahan->id_user = $user->id;
+                $ambilbahan->tgl_ambil = $request->tgl_ambil;
+                $ambilbahan->wkt_ambil = $request->wkt_ambil;
+                $ambilbahan->qty = $request->jumlah;
+                $ambilbahan->deskripsi = $request->untuk;
+                $ambilbahan->status = 'menunggu';
+                $ambilbahan->save();
 
-            $bahan->stok = $bahan->stok - $request->jumlah;
-            $bahan->save();
+                $bahan->stok = $bahan->stok - $request->jumlah;
+                $bahan->save();
 
-            Alert::success('Berhasil!', 'Berhasil Ambil Bahan.');
-        return back();
+                Alert::success('Berhasil!', 'Berhasil Ambil Bahan.');
+                return back();
+            }
         } else {
             Alert::error('Error!', 'Data tidak dapat diproses atau passsword salah.');
             return back();

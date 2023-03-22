@@ -1,13 +1,16 @@
 <section class="list_barang_section" style='margin-top: 5rem;'>
-    <div class="list_header d-flex">
-        <div class="list-title">
-            <h2 class="list-title_text">Data Pinjam Barang</h2>
+    <div class="list_header_barang d-flex">
+        <div class="list_barang_title">
+            <h2 class="list_barang_title_text">Data Pinjam Barang</h2>
+        </div>
+        <div class="export_button">
+            <a href="{{ route('export.pinjambarang') }}" class="btn btn-sm btn-info text-white text-center"><i class='bx bx-export' style="margin-right: 8px;"></i>Export Data</a>
         </div>
     </div>
 
     <div class="row justify-content-between">
+        <form class="form-inline d-flex justify-content-between" method="GET" action="{{ route('barangDipinjam') }}">
         <div class="col-md-auto">
-            <form class="form-inline" method="GET" action="{{ route('barangDipinjam') }}">
                 <label class="my-1 mr-2" for="rowsBarang">Show</label>
                 <select class="custom-select my-1 mr-sm-2" name="rowsBarang" onchange="this.form.submit()">
                     <option value="10" {{ $rowsBarang == 10 ? 'selected' : '' }}>10</option>
@@ -18,12 +21,13 @@
                 <label class="my-1 mr-2" for="rowsBarang">entries</label>
 
                 <input type="hidden" name="page" value="{{ $pinjambarang->currentPage() }}">
-            </form>
-        </div>
+            </div>
 
-        <div class="col-md-auto" >
-                <input type="text" name="search" id="search" placeholder="Search...">
-        </div>
+            <div class="col-md-auto d-flex search_box" >
+                <span>Search:</span>
+                <input type="text" name="search" id="search" class="form-control" placeholder="Search..." value="{{ $search }}">
+            </div>
+        </form>
     </div>
 
     <table class="table">
@@ -50,22 +54,22 @@
             <tr>
                 <th scope="row">{{ $no++ }}</th>
                 <td style="width: 9%;">{{ $barang->user->nama_lengkap }}</td>
-                <td style="width: 13%;">{{ $barang->barang->nama_barang }}</td>
+                <td style="width: 11%;">{{ $barang->barang->nama_barang }}</td>
                 <td style="width: 11%;">{{ $barang->tgl_mulai }}</td>
                 <td style="width: 10%;">{{ $barang->wkt_mulai }}</td>
                 <td style="width: 11%;">{{ $barang->tgl_selesai }}</td>
-                <td style="width: 10%;">{{ $barang->wkt_selesai }}</td>
+                <td style="width: 9%;">{{ $barang->wkt_selesai }}</td>
                 <td style="width: 5%;">{{ $barang->qty }}</td>
                 <td style="width: 10%;">{{ $barang->lokasi_barang }}</td>
-                <td style="width: 11%;">
+                <td style="width: 12%;">
                   @if($barang->status == 'menunggu')
-                  <span class="bg-danger text-white p-1 rounded-5 border-success">{{ $barang->status }}</span>
+                  <span class="bg-danger text-white p-1 d-flex justify-content-center border-success">{{ $barang->status }}</span>
                   @elseif($barang->status === 'batal pinjam')
-                  <span class="bg-warning text-white p-1 rounded-5 border-success">{{ $barang->status }}</span>
+                  <span class="bg-warning text-white p-1 border-success d-flex justify-content-center">{{ $barang->status }}</span>
                   @elseif($barang->status === 'selesai')
-                  <span class="bg-success text-white p-1 rounded-5 border-success">{{ $barang->status }}</span>
+                  <span class="bg-success text-white p-1 d-flex border-success justify-content-center">{{ $barang->status }}</span>
                   @elseif(Str::contains($barang->status, 'approve'))
-                  <span class="bg-success text-white p-1 rounded-5 border-success">{{ $barang->status }}</span>
+                  <span class="bg-success text-white p-1 d-flex border-success justify-content-center">{{ $barang->status }}</span>
                   @endif
                 </td>
                 <td style="width: 90%;">
@@ -78,11 +82,11 @@
                             <i style="padding: 3.5px;" class='bx bx-check-circle'></i>
                         </button>
                   @elseif ($barang->status === 'selesai')
-                  <span class="bg-success text-white p-1 rounded-5 border-success">{{ $barang->status }}</span>
+                  <span class="bg-success text-white p-1 d-flex justify-content-center border-success">{{ $barang->status }}</span>
                   @elseif(Str::contains($barang->status, 'approve'))
-                  <span class="bg-success text-white p-1 rounded-5 border-success">{{ $barang->status }}</span>
+                  <span class="bg-success text-white p-1 d-flex justify-content-center border-success">{{ $barang->status }}</span>
                   @elseif($barang->status ==='batal pinjam')
-                  <span class="bg-warning text-white p-1 rounded-5 border-success">{{ $barang->status }}</span>
+                  <span class="bg-warning text-white p-1 d-flex justify-content-center border-success">{{ $barang->status }}</span>
                   @endif
                 </td>
             </tr>
@@ -119,7 +123,7 @@
                               <label for="tgl_mulai">Tgl Mulai:</label>
                               <input type="text" class="form-control" id="tgl_mulai" value="{{ $barang->tgl_mulai }}" readonly>
                             </div>
-                            
+
                             <div class="form-group">
                               <label for="wkt_mulai">Wkt Mulai:</label>
                               <input type="text" class="form-control" id="wkt_mulai" value="{{ $barang->wkt_mulai }}" readonly>
@@ -131,7 +135,7 @@
                               <label for="tgl_selesai">Tgl Selesai:</label>
                               <input type="text" class="form-control" id="tgl_selesai" value="{{ $barang->tgl_selesai }}" readonly>
                             </div>
-                            
+
                             <div class="form-group">
                               <label for="wkt_selesai">Wkt Selesai:</label>
                               <input type="text" class="form-control" id="wkt_selesai" value="{{ $barang->wkt_selesai }}" readonly>

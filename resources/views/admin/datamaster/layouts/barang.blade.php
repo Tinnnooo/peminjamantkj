@@ -9,12 +9,13 @@
                 <i class='bx bx-plus'></i>
                 <span class="add_icon">Tambah Barang</span>
             </button>
+            <a href="{{ route('barang.export') }}" class="btn btn-sm btn-info text-white text-center"><i class='bx bx-export' style="margin-right: 8px;"></i>Export Data</a>
         </div>
     </div>
 
     <div class="row justify-content-between">
+        <form class="form-inline d-flex justify-content-between" method="GET" action="{{ route('barang') }}">
         <div class="col-md-auto">
-            <form class="form-inline" method="GET" action="{{ route('barang') }}">
                 <label class="my-1 mr-2" for="rowsBarang">Show</label>
                 <select class="custom-select my-1 mr-sm-2" name="rowsBarang" onchange="this.form.submit()">
                     <option value="10" {{ $rowsBarang == 10 ? 'selected' : '' }}>10</option>
@@ -25,16 +26,13 @@
                 <label class="my-1 mr-2" for="rowsBarang">entries</label>
 
                 <input type="hidden" name="page" value="{{ $barang->currentPage() }}">
-            </form>
-        </div>
+            </div>
 
-        <div class="col-md-auto" >
-          <form action="{{ route('searchBarang') }}" method="post">
-            @method('get')
-            @csrf
-            <input type="text" name="search" id="search" placeholder="Search...">
-          </form>
-        </div>
+            <div class="col-md-auto d-flex search_box">
+                <span>Search:</span>
+                <input type="text" name="search" id="search" class="form-control" placeholder="Search..." value="{{ $search }}">
+            </div>
+        </form>
     </div>
 
     <table class="table">
@@ -268,7 +266,7 @@
         @endif
 
         <div class="list-pagination">
-            {{$barang->appends(['rowsBarang' => $rowsBarang])->links('pagination::bootstrap-5')}}
+            {{$barang->appends(['rowsBarang' => $rowsBarang, 'search' => $search])->links('pagination::bootstrap-5')}}
         </div>
 
 </section>

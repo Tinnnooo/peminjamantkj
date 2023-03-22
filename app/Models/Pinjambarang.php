@@ -30,4 +30,9 @@ class Pinjambarang extends Model
     public function barang(){
         return $this->belongsTo(Barang::class, 'id_barang');
     }
+
+    public function collection()
+    {
+        return $this->all();
+    }
 }

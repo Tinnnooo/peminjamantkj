@@ -1,7 +1,7 @@
 <section class="list_barang_section" style='margin-top: 5rem;'>
-    <div class="list_header d-flex">
-        <div class="list-title">
-            <h2 class="list-title_text">Data Pinjam Barang</h2>
+    <div class="list_header_barang d-flex">
+        <div class="list_barang_title">
+            <h2 class="list_barang_title_text">Data Pinjam Barang</h2>
         </div>
 
         <div class="form-add">
@@ -13,8 +13,8 @@
     </div>
 
     <div class="row justify-content-between">
+        <form class="form-inline d-flex justify-content-between" method="GET" action="{{ auth()->user()->hasRole('guru') ? route('pinjamBarangGuru') : route('pinjamBarangUser') }}">
         <div class="col-md-auto">
-            <form class="form-inline" method="GET" action="{{ auth()->user()->hasRole('guru') ? route('pinjamBarangGuru') : route('pinjamBarangUser') }}">
                 <label class="my-1 mr-2" for="rowsBarang">Show</label>
                 <select class="custom-select my-1 mr-sm-2" name="rowsBarang" onchange="this.form.submit()">
                     <option value="10" {{ $rowsBarang == 10 ? 'selected' : '' }}>10</option>
@@ -25,12 +25,13 @@
                 <label class="my-1 mr-2" for="rowsBarang">entries</label>
 
                 <input type="hidden" name="page" value="{{ $pinjambarang->currentPage() }}">
-            </form>
-        </div>
+            </div>
 
-        <div class="col-md-auto" >
-                <input type="text" name="search" id="search" placeholder="Search...">
-        </div>
+            <div class="col-md-auto d-flex search_box" >
+                <span>Search:</span>
+                <input type="text" name="search" id="search" class="form-control" placeholder="Search..." value="{{ $search }}">
+            </div>
+        </form>
     </div>
 
     <table class="table">
@@ -57,51 +58,59 @@
             <tr>
                 <th scope="row">{{ $no++ }}</th>
                 <td style="width: 10%">{{ $barang->guru->nama_lengkap }}</td>
-                <td style="width: 12%;">{{ $barang->barang->nama_barang }}</td>
+                <td style="width: 11%;">{{ $barang->barang->nama_barang }}</td>
                 <td style="width: 11%;">{{ $barang->tgl_mulai }}</td>
                 <td style="width: 9%;">{{ $barang->wkt_mulai }}</td>
                 <td style="width: 11%;">{{ $barang->tgl_selesai }}</td>
                 <td style="width: 9%;">{{ $barang->wkt_selesai }}</td>
-                <td style="width: 5%;">{{ $barang->qty }}</td>
-                <td style="width: 10%;">{{ $barang->lokasi_barang }}</td>
-                <td style="width: 11%;">
+                <td style="width: 2%;">{{ $barang->qty }}</td>
+                <td style="width: 7%;">{{ $barang->lokasi_barang }}</td>
+                <td style="width: 13%;">
                   @if($barang->status == 'menunggu')
-                  <span class="bg-danger text-white p-1 rounded-5 border-success">{{ $barang->status }}</span>
+                  <span class="bg-danger text-white p-1 d-flex justify-content-center border-success">{{ $barang->status }}</span>
                   @elseif($barang->status === 'batal pinjam')
-                  <span class="bg-warning text-white p-1 rounded-5 border-success">{{ $barang->status }}</span>
+                  <span class="bg-warning text-white p-1 d-flex justify-content-center border-success">{{ $barang->status }}</span>
                   @elseif($barang->status === 'selesai')
-                  <span class="bg-success text-white p-1 rounded-5 border-success">{{ $barang->status }}</span>
+                  <span class="bg-success text-white p-1 d-flex justify-content-center border-success">{{ $barang->status }}</span>
                   @elseif(Str::contains($barang->status, 'approve'))
-                  <span class="bg-success text-white p-1 rounded-5 border-success">{{ $barang->status }}</span>
+                  <span class="bg-success text-white p-1 d-flex justify-content-center border-success">{{ $barang->status }}</span>
                   @endif
                 </td>
                 <td style="width: 90%;">
                   @if ($barang->status === 'menunggu')
-                        <button type="button" class="btn btn-success btn-sm" data-bs-toggle="modal" data-bs-target="#modal{{ $barang->id }}">
-                            <i style="padding: 3.5px;" class="fa-solid fa-eye"></i>
-                        </button>
+                  <div class="d-flex justify-content-around">
+                      <button type="button" class="btn btn-success btn-sm" data-bs-toggle="modal" data-bs-target="#modal{{ $barang->id }}">
+                          <i style="padding: 3.5px;" class="fa-solid fa-eye"></i>
+                      </button>
 
-                        <button type="button" class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#modalBatal{{ $barang->id }}">
-                            <i style="padding: 3.5px;" class='bx bxs-trash'></i>
-                        </button>
+                      <button type="button" class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#modalBatal{{ $barang->id }}">
+                          <i style="padding: 3.5px;" class='bx bxs-trash'></i>
+                      </button>
+                  </div>
                   @elseif ($barang->status === 'batal pinjam')
-                    <button type="button" class="btn btn-success btn-sm" data-bs-toggle="modal" data-bs-target="#modal{{ $barang->id }}">
-                      <i style="padding: 3.5px;" class="fa-solid fa-eye"></i>
-                    </button>
-                    <span class="bg-warning text-white p-1 rounded-5 border-success">{{ $barang->status }}</span>
+                  <div class="d-flex justify-content-around">
+                      <button type="button" class="btn btn-success btn-sm" data-bs-toggle="modal" data-bs-target="#modal{{ $barang->id }}">
+                        <i style="padding: 3.5px;" class="fa-solid fa-eye"></i>
+                      </button>
+                      <span class="bg-warning text-white p-1 d-flex justify-content-center border-success">{{ $barang->status }}</span>
+                  </div>
                   @elseif($barang->status === 'selesai')
-                    <button type="button" class="btn btn-success btn-sm" data-bs-toggle="modal" data-bs-target="#modal{{ $barang->id }}">
-                      <i style="padding: 3.5px;" class="fa-solid fa-eye"></i>
-                    </button>
-                    <span class="bg-success text-white p-1 rounded-5 border-success">{{ $barang->status }}</span>
+                  <div class="d-flex justify-content-around">
+                      <button type="button" class="btn btn-success btn-sm" data-bs-toggle="modal" data-bs-target="#modal{{ $barang->id }}">
+                        <i style="padding: 3.5px;" class="fa-solid fa-eye"></i>
+                      </button>
+                      <span class="bg-success text-white p-1 d-flex justify-content-center border-success">{{ $barang->status }}</span>
+                  </div>
                   @elseif(Str::contains($barang->status, 'approve'))
-                  <button type="button" class="btn btn-success btn-sm" data-bs-toggle="modal" data-bs-target="#modal{{ $barang->id }}">
-                    <i style="padding: 3.5px;" class="fa-solid fa-eye"></i>
-                  </button>
+                  <div class="d-flex justify-content-around">
+                      <button type="button" class="btn btn-success btn-sm" data-bs-toggle="modal" data-bs-target="#modal{{ $barang->id }}">
+                        <i style="padding: 3.5px;" class="fa-solid fa-eye"></i>
+                      </button>
 
-                  <button type="button" class="btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#modalKembalikan{{ $barang->id }}">
-                    <i style="padding: 3.5px;" class='bx bx-rotate-left text-white'></i>
-                </button>
+                      <button type="button" class="btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#modalKembalikan{{ $barang->id }}">
+                        <i style="padding: 3.5px;" class='bx bx-rotate-left text-white'></i>
+                    </button>
+                  </div>
                   @endif
                 </td>
             </tr>

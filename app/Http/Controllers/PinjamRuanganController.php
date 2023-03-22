@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Pinjambarang;
 use App\Models\User;
 use App\Models\Ruangan;
 use Illuminate\Http\Request;
@@ -20,10 +21,23 @@ class PinjamRuanganController extends Controller
 
     public function ruanganDipinjam(Request $request){
         $rowsRuangan = $request->query('rowsRuangan');
+        $search = $request->input('search');
 
+            if($search !== null){
+                $searchLike = '%'.$search.'%';
+                $searchName = Ruangan::where('nama_ruangan', 'like', $searchLike)->pluck('id');
+                if($searchName){
+                    $pinjamRuangan = Pinjamruangan::where('status', '<>', 'selesai')->whereIn('id_ruangan', $searchName)->paginate($rowsRuangan);
+                } else {
+                    $pinjamRuangan = Pinjamruangan::where('status', '<>', 'selesai')->where('id_ruangan', '0')->paginate($rowsRuangan);
+                }
+            } else if ($search == null){
+                $pinjamRuangan = Pinjamruangan::where('status', '<>', 'selesai')->paginate($rowsRuangan);
+            }
         return view('admin.datapeminjaman.index', [
-            'ruanganDipinjam' => Pinjamruangan::where('status', !'selesai')->paginate($rowsRuangan),
+            'ruanganDipinjam' => $pinjamRuangan,
             'rowsRuangan' => $rowsRuangan,
+            'search' => $search,
         ]);
     }
 
@@ -45,10 +59,24 @@ class PinjamRuanganController extends Controller
 
     public function ruanganKembali(Request $request){
         $rowsRuangan = $request->query('rowsRuangan');
+        $search = $request->input('search');
+
+            if($search !== null){
+                $searchLike = '%'.$search.'%';
+                $searchName = Ruangan::where('nama_ruangan', 'like', $searchLike)->pluck('id');
+                if($searchName){
+                    $pinjamRuangan = Pinjamruangan::where('status', 'selesai')->whereIn('id_ruangan', $searchName)->paginate($rowsRuangan);
+                } else {
+                    $pinjamRuangan = Pinjamruangan::where('status', 'selesai')->where('id_ruangan', '0')->paginate($rowsRuangan);
+                }
+            } else if ($search == null){
+                $pinjamRuangan = Pinjamruangan::where('status', 'selesai')->paginate($rowsRuangan);
+            }
 
         return view('admin.datapeminjaman.index', [
-            'ruanganKembali' => Pinjamruangan::where('status', 'selesai')->paginate($rowsRuangan),
+            'ruanganKembali' => $pinjamRuangan,
             'rowsRuangan' => $rowsRuangan,
+            'search' => $search,
         ]);
     }
 
@@ -58,14 +86,27 @@ class PinjamRuanganController extends Controller
     public function pinjamRuangan(Request $request){
         $rowsRuangan = $request->query('rowsRuangan');
         $role = Role::where('name', 'guru')->first();
+        $search = $request->input('search');
 
-        $dataPinjam = Pinjamruangan::where('id_user', Auth::user()->id)->paginate($rowsRuangan);
+        if($search !== null){
+            $searchLike = '%'.$search.'%';
+            $searchName = Ruangan::where('nama_ruangan', 'like', $searchLike)->pluck('id');
+            if($searchName){
+                $dataPinjam = Pinjamruangan::where('id_user', Auth::user()->id)->whereIn('id_ruangan', $searchName)->paginate($rowsRuangan);
+            } else {
+                $dataPinjam = Pinjamruangan::where('id_user', Auth::user()->id)->where('id_ruangan', '0')->paginate($rowsRuangan);
+            }
+        } else if ($search == null){
+            $dataPinjam = Pinjamruangan::where('id_user', Auth::user()->id)->paginate($rowsRuangan);
+        }
+
 
         return view('user.index', [
             'pinjamruangan' => $dataPinjam,
             'rowsRuangan' => $rowsRuangan,
             'ruangan' => Ruangan::where('status', 'free')->get(),
             'guru' => User::role($role)->get(),
+            'search' => $search,
         ]);
     }
 
