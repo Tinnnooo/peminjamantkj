@@ -77,7 +77,7 @@
         @endif
 
         <div class="list-pagination">
-            {{$barangKembali->appends(['rowsBarang' => $rowsBarang])->links('pagination::bootstrap-5')}}
+            {{$barangKembali->appends(['rowsBarang' => $rowsBarang, 'search' => $search])->links('pagination::bootstrap-5')}}
         </div>
 
 </section>

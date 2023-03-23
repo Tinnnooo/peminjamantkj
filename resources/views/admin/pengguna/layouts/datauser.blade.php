@@ -9,6 +9,7 @@
                 <i class='bx bx-plus'></i>
                 <span class="add_icon">Tambah Pengguna</span>
             </button>
+            <a href="{{ route('users.export') }}" class="btn btn-sm btn-info text-white text-center"><i class='bx bx-export' style="margin-right: 8px;"></i>Export Data</a>
         </div>
     </div>
 
@@ -117,7 +118,7 @@
 
                                     <div class="form-group">
                                       <label for="password">New Password</label>
-                                      <input type="password" class="form-control" id="password" name="password" required>
+                                      <input type="password" class="form-control" id="password" name="password" >
                                     </div>
 
 
@@ -146,17 +147,17 @@
                             <div class="modal-body">
                                     <div class="form-group">
                                       <label for="nama_lengkap">Nama Pengguna</label>
-                                      <input type="text" class="form-control" name="nama_lengkap" value="{{ $user->nama_lengkap }}" required>
+                                      <input type="text" class="form-control" name="nama_lengkap" value="{{ $user->nama_lengkap }}" >
                                     </div>
 
                                     <div class="form-group">
                                       <label for="username">Username</label>
-                                      <input type="text" class="form-control" name="username" value="{{ $user->username }}" required>
+                                      <input type="text" class="form-control" name="username" value="{{ $user->username }}" >
                                     </div>
 
                                     <div class="form-group">
                                       <label for="email">Email</label>
-                                      <input type="email" class="form-control" id="email" name="email" required value="{{ $user->email }}">
+                                      <input type="email" class="form-control" id="email" name="email"  value="{{ $user->email }}">
                                     </div>
 
                                     <div class="form-group">
@@ -166,7 +167,7 @@
                                         <select name="country_code" id="country_code" class="form-select country-code">
                                             <option value="+62">+62</option>
                                         </select>
-                                        <input type="number" class="form-control" id="nohp" name="nohp" required value="{{ $user->nohp }}">
+                                        <input type="number" class="form-control" id="nohp" name="nohp"  value="{{ $user->nohp }}">
                                     </div>
                                     <div class="form-group">
                                         <label for="level">Level</label>
@@ -174,6 +175,19 @@
                                             <option value="admin" {{ $user->roles->first()->name == 'admin' ? 'selected' : '' }}>Admin</option>
                                             <option value="guru" {{ $user->roles->first()->name == 'guru' ? 'selected' : '' }}>Guru</option>
                                             <option value="user" {{ $user->roles->first()->name == 'user' ? 'selected' : '' }}>User</option>
+                                        </select>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="rfid">Rfid</label>
+                                        <input type="text" class="form-control" name="rfid" placeholder="Rfid" value="{{ $user->rfid }}">
+                                        </div>
+        
+                                    <div class="form-group">
+                                        <label for="status">Status</label>
+                                        <select class="form-select form-select-sm" aria-label=".form-select-sm example" name="status">
+                                            <option value="tidak aktif" {{ $user->status == 'tidak aktif' ? 'selected' : '' }}>Tidak Aktif</option>
+                                            <option value="aktif" {{ $user->status == 'aktif' ? 'selected' : '' }}>Aktif</option>
                                         </select>
                                     </div>
 
@@ -204,17 +218,17 @@
                     <div class="modal-body">
                             <div class="form-group">
                             <label for="nama_lengkap">Nama Pengguna</label>
-                            <input type="text" class="form-control" name="nama_lengkap" placeholder="Nama lengkap" required>
+                            <input type="text" class="form-control" name="nama_lengkap" placeholder="Nama lengkap" >
                             </div>
 
                             <div class="form-group">
                             <label for="username">Username</label>
-                            <input type="text" class="form-control" name="username" placeholder="Username" required>
+                            <input type="text" class="form-control" name="username" placeholder="Username" >
                             </div>
 
                             <div class="form-group">
                             <label for="email">Email</label>
-                            <input type="email" class="form-control" id="email" name="email" required placeholder="example@gmail.com">
+                            <input type="email" class="form-control" id="email" name="email"  placeholder="example@gmail.com">
                             </div>
 
                             <div class="form-group">
@@ -224,12 +238,12 @@
                                 <select name="country_code" id="country_code" class="form-select country-code">
                                     <option value="+62">+62</option>
                                 </select>
-                                <input type="number" class="form-control" id="nohp" name="nohp" required placeholder="8xxxxxxxxxx">
+                                <input type="number" class="form-control" id="nohp" name="nohp"  placeholder="8xxxxxxxxxx">
                             </div>
 
                             <div class="form-group">
                                 <label for="password">Password</label>
-                                <input type="password" class="form-control" id="password" name="password" required placeholder="********">
+                                <input type="password" class="form-control" id="password" name="password"  placeholder="********">
                             </div>
 
                             <div class="form-group">
@@ -238,6 +252,19 @@
                                     <option value="admin">Admin</option>
                                     <option value="guru">Guru</option>
                                     <option value="user">User</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="rfid">Rfid</label>
+                                <input type="text" class="form-control" name="rfid" placeholder="Rfid" >
+                                </div>
+
+                            <div class="form-group">
+                                <label for="status">Status</label>
+                                <select class="form-select form-select-sm" aria-label=".form-select-sm example" name="status">
+                                    <option value="tidak aktif">Tidak Aktif</option>
+                                    <option value="aktif">Aktif</option>
                                 </select>
                             </div>
 
@@ -256,7 +283,7 @@
             <h5>Tidak ada data.</h5>
         @endif
         <div class="list-pagination">
-            {{$users->appends(['rowsUser' => $rowsUser])->links('pagination::bootstrap-5')}}
+            {{$users->appends(['rowsUser' => $rowsUser, 'search' => $search])->links('pagination::bootstrap-5')}}
         </div>
 
 </section>

@@ -573,6 +573,8 @@ datalist option {
   }
 
   .submit_button{
-    position: absolute;
-    bottom: 10rem;
+    position: relative;
+    margin-top: 3rem;
+    display: flex;
+    gap: 2rem;
   }

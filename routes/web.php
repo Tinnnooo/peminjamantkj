@@ -105,6 +105,8 @@ Route::middleware(['auth', 'role:admin'])->group(function(){
     Route::get('/admin/datapeminjaman/ruangandipinjam', [PinjamRuanganController::class, 'ruanganDipinjam'])->name('ruanganDipinjam');
     Route::put('/admin/datapeminjaman/ruangandipinjam/{id}', [PinjamRuanganController::class, 'approvePinjamRuangan'])->name('approvePinjamRuangan');
 
+    Route::get('/admin/pinjamruangan/export', [ExportDataController::class, 'exportPinjamruangan'])->name('pinjamruangan.export');
+
     // RUANGAN KEMBALI
     Route::get('/admin/datapeminjaman/ruangankembali', [PinjamRuanganController::class, 'ruanganKembali'])->name('ruanganKembali');
 
@@ -112,12 +114,16 @@ Route::middleware(['auth', 'role:admin'])->group(function(){
     Route::get('/admin/ambilbahan', [AmbilBahanController::class, 'index'])->name('admin.ambilBahan');
     Route::put('/admin/ambilbahan/{id}', [AmbilBahanController::class, 'approveBahan'])->name('approveBahan');
 
+    Route::get('/admin/ambilbahan/export', [ExportDataController::class, 'exportAmbilBahan'])->name('ambilbahan.export');
+
     // PENGGUNA
     Route::get('/admin/users', [DataPengguna::class, 'index'])->name('pengguna');
     Route::delete('/admin/users/{id}', [DataPengguna::class, 'hapusPengguna'])->name('hapus_pengguna');
     Route::put('/admin/users/{id}', [DataPengguna::class, 'gantiPassword'])->name('ganti_password');
     Route::put('/admin/user/{id}', [DataPengguna::class, 'editPengguna'])->name('edit_pengguna');
     Route::post('/admin/user', [DataPengguna::class, 'tambahPengguna'])->name('tambah_pengguna');
+    
+    Route::get('/admin/users/export', [ExportDataController::class, 'exportUsers'])->name('users.export');
 });
 
 Route::middleware(['auth', 'role:guru'])->group(function(){

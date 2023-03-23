@@ -202,7 +202,7 @@
         @endif
 
         <div class="list-pagination">
-            {{$ruangan->appends(['rowsRuangan' => $rowsRuangan])->links('pagination::bootstrap-5')}}
+            {{$ruangan->appends(['rowsRuangan' => $rowsRuangan, 'search' => $search])->links('pagination::bootstrap-5')}}
         </div>
 
 </section>

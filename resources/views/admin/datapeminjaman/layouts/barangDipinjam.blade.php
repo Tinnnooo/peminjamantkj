@@ -188,7 +188,7 @@
         @endif
 
         <div class="list-pagination">
-            {{$pinjambarang->appends(['rowsBarang' => $rowsBarang])->links('pagination::bootstrap-5')}}
+            {{$pinjambarang->appends(['rowsBarang' => $rowsBarang, 'search' => $search])->links('pagination::bootstrap-5')}}
         </div>
 
 </section>

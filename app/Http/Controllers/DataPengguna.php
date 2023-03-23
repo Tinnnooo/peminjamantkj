@@ -81,6 +81,8 @@ class DataPengguna extends Controller
                 $user->username = $request->username;
                 $user->email = $request->email;
                 $user->nohp = $request->country_code . $request->nohp;
+                $user->rfid = $request->rfid;
+                $user->status = $request->status;
                 if($request->level == 'admin'){
                     $user->syncRoles(['admin']);
                 } else if ($request->level == 'guru'){
@@ -119,6 +121,10 @@ class DataPengguna extends Controller
             $user->username = $request->username;
             $user->password = bcrypt($request->password);
             $user->nohp = $request->country_code . $request->nohp;
+            if($request->rfid){
+                $user->rfid = $request->rfid;
+            }
+            $user->status = $request->status;
             $user->save();
 
             if($request->level == 'admin'){

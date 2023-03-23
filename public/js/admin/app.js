@@ -40,7 +40,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
             })
         }
     }
-    showDropdown1('toggleDropdown', 'itemDropdown', 'dropdownIcon')
+    showDropdown1('toggleDropdown', 'itemDropdown', 'dropdownIcon', 'nav-bar')
 
     const showDropdown2 = (toggleId, dropdownId, dropdownIconId) => {
         const toggle = document.getElementById(toggleId),
@@ -79,6 +79,19 @@ inputPinjaman.addEventListener('focusout', function() {
     }, 100);
   });
 
+inputPinjaman.addEventListener('input', function () {
+  const value = this.value.toLowerCase();
+  const options = optionPinjaman.querySelectorAll('option');
+  options.forEach(option => {
+    const text = option.value.toLowerCase();
+    if (text.includes(value)) {
+      option.style.display = 'block';
+    } else {
+      option.style.display = 'none';
+    }
+  });
+});
+
   optionPinjaman.addEventListener('click', function (event) {
     inputPinjaman.value = event.target.value;
     optionPinjaman.style.display = 'none';
@@ -104,8 +117,22 @@ guru.addEventListener('focusout', function() {
     setTimeout(() => {
         namaGuru.style.display = 'none';
       guru.style.borderRadius = '5px';
-    }, 100);
+    }, 200);
   });
+
+guru.addEventListener('input', function() {
+  const value = this.value.toLowerCase();
+  const options = namaGuru.querySelectorAll('option');
+
+  options.forEach(option => {
+    const text = option.value.toLowerCase();
+    if(text.includes(value)){
+      option.style.display = 'block';
+    } else {
+      option.style.display = 'none';
+    }
+  })
+});
 
   namaGuru.addEventListener('click', function (event) {
     guru.value = event.target.value;

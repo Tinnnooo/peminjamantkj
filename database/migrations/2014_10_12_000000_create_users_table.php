@@ -15,12 +15,12 @@ return new class extends Migration
     {
         Schema::create('users', function (Blueprint $table) {
             $table->id();
-            $table->string('nama_lengkap');
-            $table->string('email');
+            $table->string('nama_lengkap')->unique();
+            $table->string('username')->unique();
+            $table->string('email')->unique();
             $table->integer('nohp');
-            $table->string('username');
             $table->string('password');
-            $table->string('rfid')->default('0');
+            $table->string('rfid')->nullable()->default('0');
             $table->string('status')->default('tidak aktif');
             $table->timestamps();
         });

@@ -3,6 +3,8 @@
         <div class="list_barang_title">
             <h2 class="list_barang_title_text">Data Pinjam Ruangan</h2>
         </div>
+
+        <a href="{{ route('pinjamruangan.export') }}" class="btn btn-sm btn-info text-white text-center"><i class='bx bx-export' style="margin-right: 8px;"></i>Export Data</a>
     </div>
 
     <div class="row justify-content-between">
@@ -164,7 +166,7 @@
         @endif
 
         <div class="list-pagination">
-            {{$ruanganDipinjam->appends(['rowsRuangan' => $rowsRuangan])->links('pagination::bootstrap-5')}}
+            {{$ruanganDipinjam->appends(['rowsRuangan' => $rowsRuangan, 'search' => $search])->links('pagination::bootstrap-5')}}
         </div>
 
 </section>

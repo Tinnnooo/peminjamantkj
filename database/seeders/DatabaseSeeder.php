@@ -4,7 +4,9 @@ namespace Database\Seeders;
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
+use App\Models\Pinjambarang;
 use App\Models\User;
+use Database\Factories\PinjambarangFactory;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -23,14 +25,16 @@ class DatabaseSeeder extends Seeder
         //     'email' => 'test@example.com',
         // ]);
 
-        $this->call(RoleSeeder::class);
-        $this->call(AdminSeeder::class);
-        $this->call(GuruSeeder::class);
-        $this->call(UserSeeder::class);
+        // $this->call(RoleSeeder::class);
+        // $this->call(AdminSeeder::class);
+        // $this->call(GuruSeeder::class);
+        // $this->call(UserSeeder::class);
 
-        $users = User::factory()->count(10)->create();
-        foreach ($users as $user) {
-            $user->assignRole('admin');
-        }
+        // $users = User::factory()->count(100)->create();
+        // foreach ($users as $user) {
+        //     $user->assignRole('user');
+        // }
+
+
     }
 }

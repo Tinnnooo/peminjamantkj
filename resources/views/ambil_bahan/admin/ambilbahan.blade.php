@@ -3,6 +3,8 @@
         <div class="list_barang_title">
             <h2 class="list_barang_title_text">List Ambil Bahan</h2>
         </div>
+
+        <a href="{{ route('ambilbahan.export') }}" class="btn btn-sm btn-info text-white text-center"><i class='bx bx-export' style="margin-right: 8px;"></i>Export Data</a>
     </div>
 
     <div class="row justify-content-between">
@@ -179,7 +181,7 @@
         @endif
 
         <div class="list-pagination">
-            {{$ambil_bahan->appends(['rowsBahan' => $rowsBahan])->links('pagination::bootstrap-5')}}
+            {{$ambil_bahan->appends(['rowsBahan' => $rowsBahan, 'search' => $search])->links('pagination::bootstrap-5')}}
         </div>
 
 </section>

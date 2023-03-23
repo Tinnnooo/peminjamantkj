@@ -30,12 +30,12 @@ class PinjamBarangController extends Controller
                 $searchLike = '%'.$search.'%';
                 $searchName = Barang::where('nama_barang', 'like', $searchLike)->pluck('id');
                 if($searchName){
-                    $pinjambarang = Pinjambarang::where('status', '<>', 'selesai')->whereIn('id_barang', $searchName)->paginate($rowsBarang);
+                    $pinjambarang = Pinjambarang::where('status', '<>', 'selesai')->where('status', '<>', 'batal pinjam')->whereIn('id_barang', $searchName)->paginate($rowsBarang);
                 } else {
-                    $pinjambarang = Pinjambarang::where('status', '<>', 'selesai')->where('id_barang', '0')->paginate($rowsBarang);
+                    $pinjambarang = Pinjambarang::where('status', '<>', 'selesai')->where('status', '<>', 'batal pinjam')->where('id_barang', '0')->paginate($rowsBarang);
                 }
             } else if ($search == null){
-                $pinjambarang = Pinjambarang::where('status', '<>', 'selesai')->paginate($rowsBarang);
+                $pinjambarang = Pinjambarang::where('status', '<>', 'selesai')->where('status', '<>', 'batal pinjam')->paginate($rowsBarang);
             }
 
         return view('admin.datapeminjaman.index', [
@@ -149,6 +149,7 @@ class PinjamBarangController extends Controller
 
         if($pinjambarang){
             $barang->stok = 1;
+            $barang->status = 'free';
             $barang->save();
 
             $pinjambarang->tgl_selesai = $request->tgl_selesai;
@@ -168,6 +169,7 @@ class PinjamBarangController extends Controller
 
         if($pinjambarang){
             $barang->stok = 1;
+            $barang->status = 'free';
             $barang->save();
 
             $pinjambarang->tgl_selesai = $request->tgl_selesai;
@@ -201,6 +203,7 @@ class PinjamBarangController extends Controller
         $user = Auth::user();
         if(Hash::check($request->password, $user->password) && $barang && $guru){
             $barang->stok = 0;
+            $barang->status = 'dipinjam';
             $barang->save();
 
         $pinjam = new Pinjambarang();
@@ -223,4 +226,5 @@ class PinjamBarangController extends Controller
             return back();
         }
     }
+
 }
