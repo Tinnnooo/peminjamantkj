@@ -1,4 +1,4 @@
-# Laravel Borrowing Management System
+# PeminjamanTKJ
 
 This project is a web application built with Laravel that facilitates the management of borrowing tools, items, and rooms. It is designed to streamline the borrowing and return process, track inventory, and manage user access.
 
