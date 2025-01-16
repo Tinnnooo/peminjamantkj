@@ -9,8 +9,8 @@ use Maatwebsite\Excel\Concerns\WithHeadings;
 class ExportPinjambarang implements FromCollection, WithHeadings
 {
     /**
-    * @return \Illuminate\Support\Collection
-    */
+     * @return \Illuminate\Support\Collection
+     */
     public function collection()
     {
         $pinjambarangs = Pinjambarang::all();
@@ -39,9 +39,6 @@ class ExportPinjambarang implements FromCollection, WithHeadings
         return $transformedData;
     }
 
-     /**
-     * @return array
-     */
     public function headings(): array
     {
         return [

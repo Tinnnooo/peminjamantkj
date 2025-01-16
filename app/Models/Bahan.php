@@ -10,13 +10,14 @@ class Bahan extends Model
     use HasFactory;
 
     protected $fillable = [
-        "nama_bahan",
+        'nama_bahan',
         'stok',
         'deskripsi',
-        'foto'
+        'foto',
     ];
 
-    public function ambilbahan(){
+    public function ambilbahan()
+    {
         return $this->hasMany(Ambilbahan::class, 'id_bahan');
     }
 }

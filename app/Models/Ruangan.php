@@ -12,10 +12,11 @@ class Ruangan extends Model
     protected $fillable = [
         'nama_ruangan',
         'deskripsi',
-        'foto'
+        'foto',
     ];
 
-    public function pinjamruangans(){
+    public function pinjamruangans()
+    {
         return $this->hasMany(Pinjamruangan::class, 'id_ruangan');
     }
 }

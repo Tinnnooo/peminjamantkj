@@ -9,13 +9,13 @@ use Maatwebsite\Excel\Concerns\WithHeadings;
 class ExportPinjamruangan implements FromCollection, WithHeadings
 {
     /**
-    * @return \Illuminate\Support\Collection
-    */
+     * @return \Illuminate\Support\Collection
+     */
     public function collection()
     {
         $pinjamruangan = Pinjamruangan::all();
 
-        $transformedData = $pinjamruangan->map(function($pinjamruangan){
+        $transformedData = $pinjamruangan->map(function ($pinjamruangan) {
 
             $ruangan = $pinjamruangan->ruangan;
             $user = $pinjamruangan->user;
@@ -34,7 +34,7 @@ class ExportPinjamruangan implements FromCollection, WithHeadings
             ];
 
         });
-        
+
         return $transformedData;
 
     }

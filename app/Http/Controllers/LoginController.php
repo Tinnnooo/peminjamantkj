@@ -6,43 +6,49 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use RealRashid\SweetAlert\Facades\Alert;
 
-
 class LoginController extends Controller
 {
-    public function index(){
+    public function index()
+    {
         return view('login.login');
     }
 
-    public function authenticate(Request $request){
+    public function authenticate(Request $request)
+    {
         $credentials = $request->validate([
             'username' => 'required',
             'password' => 'required',
         ]);
 
-        if(Auth::attempt($credentials)){
+        if (Auth::attempt($credentials)) {
             $request->session()->regenerate();
 
             $user = Auth::user();
-            if($user->hasRole('admin')){
+            if ($user->hasRole('admin')) {
                 Alert::success('Login success!', 'Selamat datang '.$user->nama_lengkap);
+
                 return redirect()->intended('/dashboard/admin');
-            } else if ($user->hasRole('guru')){
+            } elseif ($user->hasRole('guru')) {
                 Alert::success('Login success!', 'Selamat datang '.$user->nama_lengkap);
+
                 return redirect()->intended('/dashboard/guru');
-            } else if ($user->hasRole('user')){
+            } elseif ($user->hasRole('user')) {
                 Alert::success('Login success!', 'Selamat datang '.$user->nama_lengkap);
+
                 return redirect()->intended('/dashboard/user');
             }
-        };
-        if(!Auth::attempt($credentials)){
+        }
+        if (! Auth::attempt($credentials)) {
             Alert::error('Login failed!', 'Username or Password is wrong.');
+
             return back()->with('loginErrors', 'Login failed');
         }
 
         return back()->with('loginErrors', 'Login failed');
     }
 
-    public function logout(Request $request){
+    public function logout(Request $request)
+    {
         Auth::logout();
 
         $request->session()->invalidate();

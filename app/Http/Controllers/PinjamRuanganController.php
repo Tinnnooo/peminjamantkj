@@ -2,16 +2,15 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Pinjambarang;
-use App\Models\User;
-use App\Models\Ruangan;
-use Illuminate\Http\Request;
 use App\Models\Pinjamruangan;
-use Spatie\Permission\Models\Role;
+use App\Models\Ruangan;
+use App\Models\User;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use RealRashid\SweetAlert\Facades\Alert;
+use Spatie\Permission\Models\Role;
 
 class PinjamRuanganController extends Controller
 {
@@ -19,21 +18,23 @@ class PinjamRuanganController extends Controller
 
     // RUANGAN DIPINJAM
 
-    public function ruanganDipinjam(Request $request){
+    public function ruanganDipinjam(Request $request)
+    {
         $rowsRuangan = $request->query('rowsRuangan');
         $search = $request->input('search');
 
-            if($search !== null){
-                $searchLike = '%'.$search.'%';
-                $searchName = Ruangan::where('nama_ruangan', 'like', $searchLike)->pluck('id');
-                if($searchName){
-                    $pinjamRuangan = Pinjamruangan::where('status', '<>', 'selesai')->whereIn('id_ruangan', $searchName)->paginate($rowsRuangan);
-                } else {
-                    $pinjamRuangan = Pinjamruangan::where('status', '<>', 'selesai')->where('id_ruangan', '0')->paginate($rowsRuangan);
-                }
-            } else if ($search == null){
-                $pinjamRuangan = Pinjamruangan::where('status', '<>', 'selesai')->paginate($rowsRuangan);
+        if ($search !== null) {
+            $searchLike = '%'.$search.'%';
+            $searchName = Ruangan::where('nama_ruangan', 'like', $searchLike)->pluck('id');
+            if ($searchName) {
+                $pinjamRuangan = Pinjamruangan::where('status', '<>', 'selesai')->whereIn('id_ruangan', $searchName)->paginate($rowsRuangan);
+            } else {
+                $pinjamRuangan = Pinjamruangan::where('status', '<>', 'selesai')->where('id_ruangan', '0')->paginate($rowsRuangan);
             }
+        } elseif ($search == null) {
+            $pinjamRuangan = Pinjamruangan::where('status', '<>', 'selesai')->paginate($rowsRuangan);
+        }
+
         return view('admin.datapeminjaman.index', [
             'ruanganDipinjam' => $pinjamRuangan,
             'rowsRuangan' => $rowsRuangan,
@@ -41,37 +42,40 @@ class PinjamRuanganController extends Controller
         ]);
     }
 
-    public function approvePinjamRuangan(Request $request, $id){
+    public function approvePinjamRuangan(Request $request, $id)
+    {
         $pinjamRuangan = Pinjamruangan::find($id);
 
-        if($pinjamRuangan){
+        if ($pinjamRuangan) {
             $user = Auth::user();
 
             $pinjamRuangan->status = 'approve by '.$user->nama_lengkap;
             $pinjamRuangan->save();
 
             Alert::success('Berhasil!', 'Peminjaman telah di approve.');
+
             return back();
         }
     }
 
     // RUANGAN KEMBALI
 
-    public function ruanganKembali(Request $request){
+    public function ruanganKembali(Request $request)
+    {
         $rowsRuangan = $request->query('rowsRuangan');
         $search = $request->input('search');
 
-            if($search !== null){
-                $searchLike = '%'.$search.'%';
-                $searchName = Ruangan::where('nama_ruangan', 'like', $searchLike)->pluck('id');
-                if($searchName){
-                    $pinjamRuangan = Pinjamruangan::where('status', 'selesai')->whereIn('id_ruangan', $searchName)->paginate($rowsRuangan);
-                } else {
-                    $pinjamRuangan = Pinjamruangan::where('status', 'selesai')->where('id_ruangan', '0')->paginate($rowsRuangan);
-                }
-            } else if ($search == null){
-                $pinjamRuangan = Pinjamruangan::where('status', 'selesai')->paginate($rowsRuangan);
+        if ($search !== null) {
+            $searchLike = '%'.$search.'%';
+            $searchName = Ruangan::where('nama_ruangan', 'like', $searchLike)->pluck('id');
+            if ($searchName) {
+                $pinjamRuangan = Pinjamruangan::where('status', 'selesai')->whereIn('id_ruangan', $searchName)->paginate($rowsRuangan);
+            } else {
+                $pinjamRuangan = Pinjamruangan::where('status', 'selesai')->where('id_ruangan', '0')->paginate($rowsRuangan);
             }
+        } elseif ($search == null) {
+            $pinjamRuangan = Pinjamruangan::where('status', 'selesai')->paginate($rowsRuangan);
+        }
 
         return view('admin.datapeminjaman.index', [
             'ruanganKembali' => $pinjamRuangan,
@@ -80,26 +84,25 @@ class PinjamRuanganController extends Controller
         ]);
     }
 
-
     // USER
 
-    public function pinjamRuangan(Request $request){
+    public function pinjamRuangan(Request $request)
+    {
         $rowsRuangan = $request->query('rowsRuangan');
         $role = Role::where('name', 'guru')->first();
         $search = $request->input('search');
 
-        if($search !== null){
+        if ($search !== null) {
             $searchLike = '%'.$search.'%';
             $searchName = Ruangan::where('nama_ruangan', 'like', $searchLike)->pluck('id');
-            if($searchName){
+            if ($searchName) {
                 $dataPinjam = Pinjamruangan::where('id_user', Auth::user()->id)->whereIn('id_ruangan', $searchName)->paginate($rowsRuangan);
             } else {
                 $dataPinjam = Pinjamruangan::where('id_user', Auth::user()->id)->where('id_ruangan', '0')->paginate($rowsRuangan);
             }
-        } else if ($search == null){
+        } elseif ($search == null) {
             $dataPinjam = Pinjamruangan::where('id_user', Auth::user()->id)->paginate($rowsRuangan);
         }
-
 
         return view('user.index', [
             'pinjamruangan' => $dataPinjam,
@@ -110,11 +113,12 @@ class PinjamRuanganController extends Controller
         ]);
     }
 
-    public function batalkanPinjamRuangan(Request $request, $id){
+    public function batalkanPinjamRuangan(Request $request, $id)
+    {
         $pinjamRuangan = Pinjamruangan::find($id);
         $ruangan = Ruangan::find($pinjamRuangan->id_ruangan);
 
-        if($pinjamRuangan){
+        if ($pinjamRuangan) {
             $ruangan->status = 'free';
             $ruangan->save();
 
@@ -124,15 +128,17 @@ class PinjamRuanganController extends Controller
             $pinjamRuangan->save();
 
             Alert::success('Berhasil!', 'Pinjaman telah di batalkan');
+
             return back();
         }
     }
 
-    public function kembalikanRuangan(Request $request, $id){
+    public function kembalikanRuangan(Request $request, $id)
+    {
         $pinjamRuangan = Pinjamruangan::find($id);
         $ruangan = Ruangan::find($pinjamRuangan->id_ruangan);
 
-        if($pinjamRuangan){
+        if ($pinjamRuangan) {
             $ruangan->status = 'free';
             $ruangan->save();
 
@@ -142,13 +148,15 @@ class PinjamRuanganController extends Controller
             $pinjamRuangan->save();
 
             Alert::success('Berhasil!', 'Berhasil kembalikan pinjaman.');
+
             return back();
         }
     }
 
-    public function kirimPinjaman(Request $request){
+    public function kirimPinjaman(Request $request)
+    {
 
-        $validator = Validator::make($request->all(),[
+        $validator = Validator::make($request->all(), [
             'nama_ruangan' => 'required',
             'nama_guru' => 'required',
             'password' => 'required',
@@ -156,8 +164,9 @@ class PinjamRuanganController extends Controller
             'wkt_mulai' => 'required',
         ]);
 
-        if($validator->fails()){
-            Alert::error("Validation Error!", $validator->errors()->first());
+        if ($validator->fails()) {
+            Alert::error('Validation Error!', $validator->errors()->first());
+
             return back();
         }
 
@@ -165,11 +174,11 @@ class PinjamRuanganController extends Controller
         $guru = User::where('nama_lengkap', $request->nama_guru)->first();
         $user = Auth::user();
 
-        if(Hash::check($request->password, $user->password) && $ruangan && $guru){
+        if (Hash::check($request->password, $user->password) && $ruangan && $guru) {
             $ruangan->status = 'dipinjam';
             $ruangan->save();
 
-            $pinjam = new Pinjamruangan();
+            $pinjam = new Pinjamruangan;
             $pinjam->id_ruangan = $ruangan->id;
             $pinjam->id_guru = $guru->id;
             $pinjam->id_user = $user->id;
@@ -181,10 +190,12 @@ class PinjamRuanganController extends Controller
             $pinjam->save();
 
             Alert::success('Berhasil!', 'Berhasil Pinjam Ruangan.');
+
             return back();
-            } else {
-                Alert::error('Error!', 'Data tidak dapat di proses atau password salah.');
-                return back();
-            }
+        } else {
+            Alert::error('Error!', 'Data tidak dapat di proses atau password salah.');
+
+            return back();
         }
     }
+}

@@ -9,13 +9,13 @@ use Maatwebsite\Excel\Concerns\WithHeadings;
 class ExportUser implements FromCollection, WithHeadings
 {
     /**
-    * @return \Illuminate\Support\Collection
-    */
+     * @return \Illuminate\Support\Collection
+     */
     public function collection()
     {
         $user = User::all();
 
-        $transformedData = $user->map(function($user){
+        $transformedData = $user->map(function ($user) {
             return [
                 'id' => $user->id,
                 'nama_lengkap' => $user->nama_lengkap,

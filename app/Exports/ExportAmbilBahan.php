@@ -9,13 +9,13 @@ use Maatwebsite\Excel\Concerns\WithHeadings;
 class ExportAmbilBahan implements FromCollection, WithHeadings
 {
     /**
-    * @return \Illuminate\Support\Collection
-    */
+     * @return \Illuminate\Support\Collection
+     */
     public function collection()
     {
         $ambilBahan = AmbilBahan::all();
 
-        $transformedData = $ambilBahan->map(function($ambilBahan){
+        $transformedData = $ambilBahan->map(function ($ambilBahan) {
 
             $bahan = $ambilBahan->bahan;
             $user = $ambilBahan->user;
@@ -29,7 +29,7 @@ class ExportAmbilBahan implements FromCollection, WithHeadings
                 'jumlah_ambil' => $ambilBahan->qty,
                 'peruntukan' => $ambilBahan->deskripsi,
                 'status' => $ambilBahan->status,
-            ]; 
+            ];
         });
 
         return $transformedData;

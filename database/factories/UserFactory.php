@@ -3,8 +3,6 @@
 namespace Database\Factories;
 
 use App\Models\User;
-use Illuminate\Support\Str;
-use Spatie\Permission\Models\Role;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -17,8 +15,7 @@ class UserFactory extends Factory
      *
      * @return array<string, mixed>
      */
-
-     protected $model = User::class;
+    protected $model = User::class;
 
     public function definition()
     {
@@ -29,7 +26,7 @@ class UserFactory extends Factory
             'username' => fake()->userName(),
             'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi',
             'rfid' => '0',
-            'status' => 'tidak aktif'
+            'status' => 'tidak aktif',
         ];
     }
 

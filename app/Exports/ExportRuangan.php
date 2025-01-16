@@ -9,13 +9,13 @@ use Maatwebsite\Excel\Concerns\WithHeadings;
 class ExportRuangan implements FromCollection, WithHeadings
 {
     /**
-    * @return \Illuminate\Support\Collection
-    */
+     * @return \Illuminate\Support\Collection
+     */
     public function collection()
     {
         $ruangan = Ruangan::all();
 
-        $transformedData = $ruangan->map(function($ruangan){
+        $transformedData = $ruangan->map(function ($ruangan) {
             return [
                 'id' => $ruangan->id,
                 'nama_ruangan' => $ruangan->nama_ruangan,
@@ -27,9 +27,6 @@ class ExportRuangan implements FromCollection, WithHeadings
         return $transformedData;
     }
 
-    /**
-     * @return array
-     */
     public function headings(): array
     {
         return [

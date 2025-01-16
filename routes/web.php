@@ -1,22 +1,20 @@
 <?php
 
-use App\Http\Controllers\DataMaster;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\DataPengguna;
-use App\Http\Controllers\GuruController;
-use App\Http\Controllers\UserController;
 use App\Http\Controllers\AdminController;
-use App\Http\Controllers\BahanController;
-use App\Http\Controllers\LoginController;
-use App\Http\Controllers\BarangController;
-use App\Http\Controllers\RuanganController;
 use App\Http\Controllers\AmbilBahanController;
-use App\Http\Controllers\ExportController;
+use App\Http\Controllers\BahanController;
+use App\Http\Controllers\BarangController;
+use App\Http\Controllers\DataMaster;
+use App\Http\Controllers\DataPengguna;
 use App\Http\Controllers\ExportDataController;
+use App\Http\Controllers\GuruController;
+use App\Http\Controllers\LoginController;
 use App\Http\Controllers\PinjamBarangController;
 use App\Http\Controllers\PinjamRuanganController;
-use App\Models\Pinjambarang;
+use App\Http\Controllers\RuanganController;
+use App\Http\Controllers\UserController;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Route;
 
 /*
 |--------------------------------------------------------------------------
@@ -41,21 +39,18 @@ Route::get('/', function () {
     }
 });
 
-
-
-Route::middleware(['guest'])->group(function(){
+Route::middleware(['guest'])->group(function () {
     Route::get('/login', [LoginController::class, 'index'])->name('login');
     Route::post('/login', [LoginController::class, 'authenticate'])->name('authenticate');
 });
 
-Route::middleware(['auth', 'role:admin'])->group(function(){
+Route::middleware(['auth', 'role:admin'])->group(function () {
 
     // DASHBOARD
     Route::get('/dashboard/admin', [AdminController::class, 'index'])->name('admin.index');
 
     Route::put('/dashboard/admin/ruangan/{id}', [AdminController::class, 'ruanganApprove'])->name('admin.ruanganApprove');
     Route::put('/dashboard/admin/barang/{id}', [AdminController::class, 'barangApprove'])->name('admin.barangApprove');
-
 
     // LOGOUT
     Route::post('/admin/logout', [AdminController::class, 'logout'])->name('admin.logout');
@@ -122,17 +117,16 @@ Route::middleware(['auth', 'role:admin'])->group(function(){
     Route::put('/admin/users/{id}', [DataPengguna::class, 'gantiPassword'])->name('ganti_password');
     Route::put('/admin/user/{id}', [DataPengguna::class, 'editPengguna'])->name('edit_pengguna');
     Route::post('/admin/user', [DataPengguna::class, 'tambahPengguna'])->name('tambah_pengguna');
-    
+
     Route::get('/admin/users/export', [ExportDataController::class, 'exportUsers'])->name('users.export');
 });
 
-Route::middleware(['auth', 'role:guru'])->group(function(){
+Route::middleware(['auth', 'role:guru'])->group(function () {
 
     // DASHBOARD
     Route::get('/dashboard/guru', [GuruController::class, 'index'])->name('guru');
     Route::put('/dashboard/guru/approveBarang/{id}', [GuruController::class, 'approveBarang'])->name('guru.approveBarang');
     Route::put('/dashboard/guru/approveRuangan/{id}', [GuruController::class, 'approveRuangan'])->name('guru.approveRuangan');
-
 
     // LOGOUT
     Route::post('guru/logout', [GuruController::class, 'logout'])->name('guru.logout');
@@ -161,11 +155,10 @@ Route::middleware(['auth', 'role:guru'])->group(function(){
     Route::post('guru/ambilbahan/kirimAmbilBahan', [AmbilBahanController::class, 'kirimAmbilBahan'])->name('kirimAmbilBahan');
 });
 
-Route::middleware(['auth', 'role:user'])->group(function(){
+Route::middleware(['auth', 'role:user'])->group(function () {
 
     // DASHBOARD
     Route::get('/dashboard/user', [UserController::class, 'index'])->name('user.index');
-
 
     // LOGOUT
     Route::post('user/logout', [UserController::class, 'logout'])->name('user.logout');
@@ -186,4 +179,3 @@ Route::middleware(['auth', 'role:user'])->group(function(){
 
     Route::post('user/pinjamruangan/kirimPinjaman', [PinjamRuanganController::class, 'kirimPinjaman'])->name('kirimPinjamanRuanganUser');
 });
-

@@ -5,13 +5,14 @@ namespace App\Http\Controllers;
 use App\Models\Bahan;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Validator;
 use Intervention\Image\Facades\Image;
 use RealRashid\SweetAlert\Facades\Alert;
-use Illuminate\Support\Facades\Validator;
 
 class BahanController extends Controller
 {
-    public function tambahBahan(Request $request){
+    public function tambahBahan(Request $request)
+    {
         $validator = Validator::make($request->all(), [
             'nama_bahan' => 'required',
             'stok' => 'required',
@@ -19,16 +20,17 @@ class BahanController extends Controller
             'foto' => 'required|image|file|mimes:png,jpeg,jpg|max:2048',
         ]);
 
-        if($validator->fails()){
+        if ($validator->fails()) {
             Alert::error('Validation Erro!', $validator->errors()->first());
+
             return back();
         }
 
-        $nama_file = time()."_".$request->file('foto')->getClientOriginalName();
+        $nama_file = time().'_'.$request->file('foto')->getClientOriginalName();
         $request->file('foto')->storeAs('images', $nama_file);
         $path_file = public_path('storage/images/'.$nama_file);
         $image = Image::make($path_file);
-        $image->resize(448,200);
+        $image->resize(448, 200);
         $image->save($path_file);
 
         $data = [
@@ -41,19 +43,22 @@ class BahanController extends Controller
         Bahan::create($data);
 
         Alert::success('Berhasil!', 'Data Bahan telah di tambah.');
+
         return back();
     }
 
-    public function editBahan(Request $request, $id){
-        $validator = Validator::make($request->all(),[
+    public function editBahan(Request $request, $id)
+    {
+        $validator = Validator::make($request->all(), [
             'nama_bahan' => 'required',
             'stok' => 'required',
             'deskripsi' => 'required',
             'foto' => 'image|file|mimes:jpg,jpeg,png|max:2048',
         ]);
 
-        if($validator->fails()){
+        if ($validator->fails()) {
             Alert::error('Validation Error!', $validator->errors()->first());
+
             return back();
         }
 
@@ -64,11 +69,11 @@ class BahanController extends Controller
         $bahan->stok = $request->stok;
         $bahan->deskripsi = $request->deskripsi;
 
-        if($request->hasFile('foto')){
-            $new_file = time()."_".$request->file('foto')->getClientOriginalName();
-            $request->file('foto')->storeAs('images',$new_file);
+        if ($request->hasFile('foto')) {
+            $new_file = time().'_'.$request->file('foto')->getClientOriginalName();
+            $request->file('foto')->storeAs('images', $new_file);
             $path_file = public_path('storage/images/'.$new_file);
-            
+
             $image = Image::make($path_file);
             $image->resize(448, 200);
             $image->save($path_file);
@@ -76,22 +81,25 @@ class BahanController extends Controller
             Storage::delete('images/'.$bahan->foto);
             $bahan->foto = $new_file;
         }
-        
+
         $bahan->save();
 
         Alert::success('Berhasil!', 'Data Bahan telah di ubah.');
+
         return back();
     }
 
-    public function hapusBahan($id){
+    public function hapusBahan($id)
+    {
         $bahan = Bahan::find($id);
 
-        if($bahan){
+        if ($bahan) {
             Storage::delete('images/'.$bahan->foto);
 
             $bahan->delete();
 
             Alert::success('Berhasil!', 'Data Bahan telah di hapus.');
+
             return back();
         }
     }

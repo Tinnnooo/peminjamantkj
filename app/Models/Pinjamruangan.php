@@ -17,15 +17,18 @@ class Pinjamruangan extends Model
         'status',
     ];
 
-    public function user(){
+    public function user()
+    {
         return $this->belongsTo(User::class, 'id_user');
     }
 
-    public function guru(){
+    public function guru()
+    {
         return $this->belongsTo(User::class, 'id_guru');
     }
 
-    public function ruangan(){
+    public function ruangan()
+    {
         return $this->belongsTo(Ruangan::class, 'id_ruangan');
     }
 }

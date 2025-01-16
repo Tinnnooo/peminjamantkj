@@ -16,18 +16,21 @@ class Pinjambarang extends Model
         'tgl_selesai',
         'wkt_selesai',
         'lokasi_barang',
-        'status'
+        'status',
     ];
 
-    public function user(){
+    public function user()
+    {
         return $this->belongsTo(User::class, 'id_user');
     }
 
-    public function guru(){
+    public function guru()
+    {
         return $this->belongsTo(User::class, 'id_guru');
     }
 
-    public function barang(){
+    public function barang()
+    {
         return $this->belongsTo(Barang::class, 'id_barang');
     }
 

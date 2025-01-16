@@ -185,8 +185,6 @@ return [
         RealRashid\SweetAlert\SweetAlertServiceProvider::class,
         Maatwebsite\Excel\ExcelServiceProvider::class,
 
-
-
         /*
          * Package Service Providers...
          */

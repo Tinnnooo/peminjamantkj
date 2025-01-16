@@ -19,11 +19,13 @@ class Ambilbahan extends Model
         'status',
     ];
 
-    public function user(){
+    public function user()
+    {
         return $this->belongsTo(User::class, 'id_user');
-    }   
+    }
 
-    public function bahan(){
+    public function bahan()
+    {
         return $this->belongsTo(Bahan::class, 'id_bahan');
     }
 }

@@ -2,18 +2,19 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\User;
 use App\Models\Barang;
-use App\Models\Ruangan;
 use App\Models\Pinjambarang;
-use Illuminate\Http\Request;
 use App\Models\Pinjamruangan;
+use App\Models\Ruangan;
+use App\Models\User;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class GuruController extends Controller
 {
     // INDEX
-    public function index(Request $request){
+    public function index(Request $request)
+    {
 
         $rowsBarang = $request->query('rowsBarang', 10);
         $rowsRuangan = $request->query('rowsRuangan', 10);
@@ -29,7 +30,7 @@ class GuruController extends Controller
                 ->orWhere('status', 'LIKE', '%approve%');
         })->orderBy('status')->paginate($rowsRuangan, ['*'], 'ruangan');
 
-        $countBarang = Pinjambarang::where('status', 'menunggu')->orWhere('status','like', '%diizinkan%')->orWhere('status', 'like', '%approve%')->get();
+        $countBarang = Pinjambarang::where('status', 'menunggu')->orWhere('status', 'like', '%diizinkan%')->orWhere('status', 'like', '%approve%')->get();
         $countRuangan = Pinjamruangan::where('status', 'menunggu')->orWhere('status', 'like', '%approve%')->get();
 
         return view('admin.index', [
@@ -45,7 +46,8 @@ class GuruController extends Controller
         ]);
     }
 
-    public function logout(Request $request){
+    public function logout(Request $request)
+    {
         Auth::logout();
 
         $request->session()->invalidate();
@@ -55,24 +57,28 @@ class GuruController extends Controller
         return redirect('/login');
     }
 
-    public function approveBarang($id){
+    public function approveBarang($id)
+    {
         $user = Auth::user();
         $pinjambarang = Pinjambarang::find($id);
 
-        if($user && $pinjambarang){
+        if ($user && $pinjambarang) {
             $pinjambarang->status = 'approve by '.$user->nama_lengkap;
             $pinjambarang->save();
+
             return back();
         }
     }
 
-    public function approveRuangan($id){
+    public function approveRuangan($id)
+    {
         $user = Auth::user();
         $pinjamruangan = Pinjamruangan::find($id);
 
-        if($user && $pinjamruangan){
+        if ($user && $pinjamruangan) {
             $pinjamruangan->status = 'approve by '.$user->nama_lengkap;
             $pinjamruangan->save();
+
             return back();
         }
     }

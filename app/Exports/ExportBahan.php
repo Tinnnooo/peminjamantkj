@@ -9,13 +9,13 @@ use Maatwebsite\Excel\Concerns\WithHeadings;
 class ExportBahan implements FromCollection, WithHeadings
 {
     /**
-    * @return \Illuminate\Support\Collection
-    */
+     * @return \Illuminate\Support\Collection
+     */
     public function collection()
     {
         $bahan = Bahan::all();
 
-        $transformedData = $bahan->map(function($bahan){
+        $transformedData = $bahan->map(function ($bahan) {
             return [
                 'id' => $bahan->id,
                 'nama_bahan' => $bahan->nama_bahan,
